@@ -1,0 +1,7 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/glider-connectors" },
+    { "path": "packages/glider-runner" }
+  ]
+}

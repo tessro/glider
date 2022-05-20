@@ -1,0 +1,26 @@
+{
+  "name": "@glider/runner",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Glider job runner",
+  "author": "Balsa, Inc.",
+  "license": "MIT",
+  "main": "app.js",
+  "scripts": {
+    "docker:build": "docker build -t glider-runner -f ./Dockerfile ../..",
+    "start": "docker run --rm --mount type=bind,src=/Users/paul/Development/balsa/cloud/packages/glider-plugin,dst=/app/plugins/balsa glider-runner"
+  },
+  "dependencies": {
+    "got": "11.8.3",
+    "mysql2": "2.3.3",
+    "pino": "7.11.0",
+    "uuid": "8.3.2",
+    "yargs": "17.5.1",
+    "yauzl": "2.10.0"
+  },
+  "devDependencies": {
+    "@types/glider": "*",
+    "@types/uuid": "8.3.4",
+    "pino-pretty": "7.6.1"
+  }
+}

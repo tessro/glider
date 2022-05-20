@@ -1,0 +1,49 @@
+{
+  "name": "@balsa/glider",
+  "description": "Lightweight, serverless ELT",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://github.com/balsa/glider",
+  "repository": "github:balsa/glider",
+  "bugs": {
+    "url": "https://github.com/balsa/glider/issues"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "build:watch": "npm run build -- --watch",
+    "check-all": "npm run lint && npm run typecheck && npm run test",
+    "fmt": "npm run prettier",
+    "lint": "eslint packages",
+    "prettier": "prettier -w .",
+    "prettier:check": "prettier -c .",
+    "api:build": "npm run -w @glider/api build",
+    "api:deploy": "npm run -w @glider/api deploy",
+    "api:remove": "npm run -w @glider/api remove",
+    "api:start": "npm run -w @glider/api start",
+    "test": "jest",
+    "typecheck": "npm run build"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@babel/core": "7.17.12",
+    "@babel/preset-env": "7.17.12",
+    "@babel/preset-typescript": "7.17.12",
+    "@tsconfig/node16": "1.0.2",
+    "@types/jest": "27.5.1",
+    "@types/node": "16.11.36",
+    "@typescript-eslint/eslint-plugin": "5.25.0",
+    "@typescript-eslint/parser": "5.25.0",
+    "babel-jest": "28.1.0",
+    "esbuild": "0.14.39",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-import-resolver-typescript": "2.7.1",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-jest": "26.2.2",
+    "jest": "28.1.0",
+    "prettier": "2.6.2",
+    "typescript": "4.6.4"
+  }
+}

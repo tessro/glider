@@ -1,0 +1,44 @@
+# Exclude everything by default -- by taking an allowlist approach we minimize
+# the chance of spurious builds.
+*
+
+# Include necessary root configuration -- without these files we can't install
+# dependencies.
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.build.json
+
+# This cute two-liner works around an issue with CDK's `.dockerignore` parsing.
+# If we don't explicitly include `packages`, subdirectories will be excluded
+# even if they are explicitly included. 🤦 However, we don't want *all*
+# subdirectories, so the second line proceeds to ignore all of them. We can then
+# proceed normally, explicitly including the things we need.
+!packages
+packages/*
+
+# Include all target packages.
+!packages/glider-runner
+
+# Include all sibling dependencies -- `@glider/*` dependencies must be named here
+# or they won't be accessible at build time.
+!packages/glider-connectors
+!packages/glider-types
+
+# Exclude config files that aren't used at build time.
+**/babel.config.js
+# ^-- Babel is only used by Jest
+**/jest.config.js
+
+# Exclude all tests -- these never affect the build artifact.
+**/*.test.ts
+
+# Never copy `node_modules` -- these should always be installed within the
+# container to guarantee reproducible builds and to avoid subtle bugs with
+# binary compatibility in libraries like Prisma and esbuild.
+**/node_modules
+
+# Exclude build artifacts -- these should be generated within the container to
+# ensure they exactly match the state of the repository.
+**/dist
+**/tmp

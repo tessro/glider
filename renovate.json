@@ -1,0 +1,24 @@
+{
+  "extends": ["config:base"],
+  "labels": ["dependencies"],
+  "reviewers": ["paulrosania"],
+  "stabilityDays": 3,
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchPackagePrefixes": ["@types/"],
+      "automerge": true
+    },
+    {
+      "matchPackagePrefixes": ["@serverless-stack/"],
+      "groupName": "Serverless Stack monorepo"
+    },
+    {
+      "matchPackageNames": ["node"],
+      "matchDatasources": ["docker"],
+      "allowedVersions": "/^\\d*[02468]\\./"
+    }
+  ]
+}

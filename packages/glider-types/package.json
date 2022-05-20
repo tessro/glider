@@ -1,0 +1,17 @@
+{
+  "name": "@types/glider",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TypeScript definitions for Glider plugins",
+  "author": "Balsa, Inc.",
+  "license": "MIT",
+  "main": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/balsa/glider.git",
+    "directory": "packages/glider-types"
+  },
+  "scripts": {},
+  "dependencies": {},
+  "types": "index.d.ts"
+}
