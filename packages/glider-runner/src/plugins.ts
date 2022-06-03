@@ -1,7 +1,15 @@
+import { createWriteStream } from 'fs';
 import * as fs from 'fs/promises';
+import * as path from 'path';
 import { join, dirname } from 'path';
+import type { Readable } from 'stream';
 import { runInNewContext } from 'vm';
 
+import {
+  S3Client,
+  ListObjectsV2Command,
+  GetObjectCommand,
+} from '@aws-sdk/client-s3';
 import {
   Constructor,
   CredentialsProvider,
@@ -9,7 +17,9 @@ import {
   Destination,
   PluginExports,
 } from 'glider';
+import mkdirp from 'mkdirp';
 import pino from 'pino';
+import { fromBuffer, ZipFile } from 'yauzl';
 
 import { Context } from './context';
 
@@ -104,7 +114,153 @@ async function loadPlugin(path: string, context: Context): Promise<Plugin> {
   };
 }
 
-export async function loadPlugins(context: Context): Promise<Plugin[]> {
+async function fetchPluginsFromS3(bucketName: string): Promise<void> {
+  const region = process.env.AWS_REGION ?? 'us-west-2';
+  const client = new S3Client({ region });
+  const listCommand = new ListObjectsV2Command({
+    Bucket: bucketName,
+  });
+
+  logger.info({
+    msg: 'Fetching plugins from S3',
+    region,
+    bucket: bucketName,
+  });
+
+  const result = await client.send(listCommand);
+  if (!result.Contents) {
+    logger.warn({
+      msg: 'S3 `ListObjectsV2` response did not contain a `Contents` field, aborting',
+    });
+    return;
+  }
+
+  for (const entry of result.Contents) {
+    const key = entry.Key;
+    if (!key) {
+      logger.warn({
+        msg: 'Encountered entry with no key while parsing S3 `ListObjectsV2` response, skipping',
+        bucket: bucketName,
+        key,
+      });
+      continue;
+    }
+
+    logger.info({
+      msg: `Found '${key}' in S3, downloading...`,
+      region,
+      bucket: bucketName,
+      key,
+    });
+
+    const cmd = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+    });
+
+    const result = await client.send(cmd);
+    if (!result.Body) {
+      logger.warn({
+        msg: `S3 object '${key}' returned no data`,
+        bucket: bucketName,
+        key,
+      });
+      continue;
+    }
+
+    // Compose plugin path from zipfile name, ignoring directories. Since our
+    // filesystem scan doesn't traverse subdirectories, replicating nested
+    // structure would be pointless. This introduces the possibility of
+    // conflicts, e.g. `s3://a/b/plugin.zip` and `s3://a/c/plugin.zip` would
+    // both be computed as `plugin`. For now that seems like an easy edge case
+    // to avoid.
+    const basename = path.basename(key, '.zip');
+    const pluginDirectory = path.join(PLUGIN_DIRECTORY, basename);
+    const buffer = await streamToBuffer(result.Body);
+
+    logger.info({
+      msg: `Unpacking '${key}' into '${pluginDirectory}'`,
+      source: key,
+      destination: pluginDirectory,
+    });
+
+    await unpack(pluginDirectory, buffer);
+
+    logger.info({
+      msg: `Finished unpacking '${key}'`,
+      source: key,
+      destination: pluginDirectory,
+    });
+  }
+}
+
+function streamToBuffer(stream: Readable): Promise<Buffer> {
+  return new Promise<Buffer>((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    stream.on('data', (chunk) => chunks.push(chunk));
+    stream.once('end', () => resolve(Buffer.concat(chunks)));
+    stream.once('error', reject);
+  });
+}
+
+async function unpack(rootDir: string, contents: Buffer): Promise<void> {
+  // Ensure directory exists
+  await mkdirp(rootDir);
+
+  return new Promise((resolve, reject) => {
+    fromBuffer(
+      contents,
+      { lazyEntries: true },
+      (err: Error | null, zipfile: ZipFile) => {
+        if (err) {
+          return reject(err);
+        }
+
+        zipfile.readEntry();
+
+        zipfile.on('end', () => {
+          resolve();
+        });
+
+        zipfile.on('entry', (entry) => {
+          const destination = path.join(rootDir, entry.fileName);
+          if (destination.endsWith('/')) {
+            logger.info({
+              msg: `Creating directory '${destination}'`,
+              path: destination,
+            });
+
+            mkdirp(destination).then(() => {
+              zipfile.readEntry();
+            });
+          } else {
+            mkdirp(path.dirname(destination)).then(() => {
+              zipfile.openReadStream(entry, (err, readStream) => {
+                if (err) {
+                  return reject(err);
+                }
+
+                const writeStream = createWriteStream(destination, {
+                  flags: 'w',
+                });
+                logger.info({
+                  msg: `Unpacking file '${entry.fileName}'`,
+                  path: entry.fileName,
+                });
+                readStream.pipe(writeStream);
+                writeStream.on('close', () => {
+                  zipfile.readEntry();
+                });
+              });
+            });
+          }
+        });
+      }
+    );
+  });
+}
+
+async function loadPluginsFromVolume(context: Context): Promise<Plugin[]> {
   const plugins = [];
 
   for (const filename of await fs.readdir(PLUGIN_DIRECTORY)) {
@@ -115,4 +271,12 @@ export async function loadPlugins(context: Context): Promise<Plugin[]> {
   }
 
   return plugins;
+}
+
+export async function loadPlugins(context: Context): Promise<Plugin[]> {
+  if (process.env.PLUGINS_BUCKET_NAME) {
+    await fetchPluginsFromS3(process.env.PLUGINS_BUCKET_NAME);
+  }
+
+  return loadPluginsFromVolume(context);
 }

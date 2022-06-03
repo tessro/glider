@@ -1,5 +1,5 @@
 import { Api } from '@serverless-stack/resources';
-import { Stack, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
+import { Stack, aws_dynamodb as dynamodb, aws_s3 as s3 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 import { Worker } from './Worker';
@@ -7,6 +7,9 @@ import { Worker } from './Worker';
 interface ServiceProps {
   dynamoDb?: {
     billingMode?: dynamodb.BillingMode;
+  };
+  plugins?: {
+    bucket: s3.IBucket;
   };
 }
 
@@ -72,6 +75,6 @@ export class Service extends Construct {
     this.api.attachPermissions([table]);
 
     // TODO(ptr): state machine should talk to API
-    new Worker(this, 'Worker', { table });
+    new Worker(this, 'Worker', { table, plugins: props.plugins });
   }
 }

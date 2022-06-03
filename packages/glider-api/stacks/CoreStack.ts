@@ -1,10 +1,20 @@
 import { StackContext } from '@serverless-stack/resources';
-import { aws_iam as iam } from 'aws-cdk-lib';
+import { aws_iam as iam, aws_s3 as s3 } from 'aws-cdk-lib';
 
 import { Service } from '../constructs/Service';
 
 export function CoreStack({ stack }: StackContext) {
-  const service = new Service(stack, 'Glider');
+  const pluginBucket = new s3.Bucket(stack, 'Plugins', {
+    blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+    encryption: s3.BucketEncryption.S3_MANAGED,
+    enforceSSL: true,
+  });
+
+  const service = new Service(stack, 'Glider', {
+    plugins: {
+      bucket: pluginBucket,
+    },
+  });
 
   const user = new iam.User(stack, 'ApiUser');
   user.attachInlinePolicy(
@@ -20,6 +30,9 @@ export function CoreStack({ stack }: StackContext) {
       ],
     })
   );
+
+  // Allow the API user to read from the plugin bucket, for simplicity in dev
+  pluginBucket.grantRead(user);
 
   const accessKey = new iam.AccessKey(stack, 'ApiUserAccessKey', {
     user,

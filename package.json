@@ -19,6 +19,7 @@
     "prettier:check": "prettier -c .",
     "api:build": "npm run -w @glider/api build",
     "api:deploy": "npm run -w @glider/api deploy",
+    "api:diff": "npm run -w @glider/api diff",
     "api:remove": "npm run -w @glider/api remove",
     "api:start": "npm run -w @glider/api start",
     "test": "jest",

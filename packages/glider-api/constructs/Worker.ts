@@ -5,12 +5,16 @@ import {
   aws_ecs as ecs,
   aws_iam as iam,
   aws_logs as logs,
+  aws_s3 as s3,
   aws_stepfunctions as sfn,
   aws_stepfunctions_tasks as tasks,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 interface WorkerProps {
+  plugins?: {
+    bucket: s3.IBucket;
+  };
   table: dynamodb.ITable;
   timeout?: Duration;
 }
@@ -87,6 +91,9 @@ export class Worker extends Construct {
       image: ecs.ContainerImage.fromAsset('../..', {
         file: 'packages/glider-runner/Dockerfile',
       }),
+      environment: {
+        PLUGINS_BUCKET_NAME: this.props.plugins?.bucket.bucketName ?? '',
+      },
       logging: ecs.LogDrivers.awsLogs({ streamPrefix: 'glider' }),
     });
 
@@ -103,6 +110,9 @@ export class Worker extends Construct {
       ],
       resultPath: '$.state',
     });
+
+    // Ensure the worker can read the S3 bucket containing plugins
+    this.props.plugins?.bucket.grantRead(taskDefinition.obtainExecutionRole());
 
     // Step Functions has built-in support for starting execution of Step
     // Functions, but we can't use it because it from here, since it would

@@ -9,6 +9,7 @@
   "scripts": {
     "build": "sst build",
     "deploy": "sst deploy",
+    "diff": "sst diff",
     "remove": "sst remove",
     "start": "sst start"
   },
