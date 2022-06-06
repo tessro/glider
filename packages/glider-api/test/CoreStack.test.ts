@@ -14,5 +14,5 @@ test('Core Stack', () => {
 
   // THEN
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 17);
+  template.resourceCountIs('AWS::Lambda::Function', 21);
 });

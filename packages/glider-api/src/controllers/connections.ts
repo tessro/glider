@@ -31,10 +31,27 @@ export const list: Handler = async (event, context) => {
 export const create: Handler = async (event, context) => {
   withRequest(event, context);
 
+  if (!event.body) {
+    return make400({
+      error_message: 'Expected JSON payload',
+    });
+  }
+
+  let data;
+  try {
+    data = JSON.parse(event.body);
+  } catch (e) {
+    return make400({
+      error_message: 'Invalid JSON',
+    });
+  }
+
+  // TODO(ptr): input validation
+
   const result = await store.create({
-    schedule: '* * * * *',
-    sourceId: 'foo',
-    destinationId: 'bar',
+    schedule: data.schedule,
+    sourceId: data.sourceId,
+    destinationId: data.destinationId,
   });
 
   return {
@@ -83,9 +100,26 @@ export const update: Handler = async (event, context) => {
     };
   }
 
+  if (!event.body) {
+    return make400({
+      error_message: 'Expected JSON payload',
+    });
+  }
+
+  let data;
+  try {
+    data = JSON.parse(event.body);
+  } catch (e) {
+    return make400({
+      error_message: 'Invalid JSON',
+    });
+  }
+
+  // TODO(ptr): input validation
+
   try {
     await store.update(id, {
-      schedule: '*/60 * * * *',
+      schedule: data.schedule,
     });
   } catch (err: unknown) {
     assertIsAWSError(err);

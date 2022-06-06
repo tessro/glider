@@ -3,8 +3,9 @@ import { DynamoDB } from 'aws-sdk';
 import pino from 'pino';
 import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda';
 
-import { make400 } from '../lambda';
+import { make400, make404 } from '../lambda';
 import { DestinationStore } from '../stores';
+import { assertIsAWSError } from '../utils';
 
 const withRequest = lambdaRequestTracker();
 const destination = pinoLambdaDestination();
@@ -65,29 +66,114 @@ export const create: Handler = async (event, context) => {
 export const get: Handler = async (event, context) => {
   withRequest(event, context);
 
+  const id = event.pathParameters?.id;
+  if (!id) {
+    return make400({
+      error_message: 'Expected destination ID',
+    });
+  }
+
+  const destination = await store.get(id);
+  if (!destination) {
+    return make404({
+      error_message: 'Destination not found',
+    });
+  }
+
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ event }),
+    body: JSON.stringify(destination),
   };
 };
 
 export const update: Handler = async (event, context) => {
   withRequest(event, context);
 
+  const id = event.pathParameters?.id;
+  if (!id) {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        error: 'INVALID_INPUT',
+        error_message: 'Expected destination ID',
+      }),
+    };
+  }
+
+  if (!event.body) {
+    return make400({
+      error_message: 'Expected JSON payload',
+    });
+  }
+
+  let data;
+  try {
+    data = JSON.parse(event.body);
+  } catch (e) {
+    return make400({
+      error_message: 'Invalid JSON',
+    });
+  }
+
+  // TODO(ptr): input validation
+
+  try {
+    await store.update(id, {
+      credentials: data.credentials,
+      options: data.options,
+    });
+  } catch (err: unknown) {
+    assertIsAWSError(err);
+
+    if (err.code === 'ConditionalCheckFailedException') {
+      logger.info({ err });
+
+      return make404({
+        error_message: 'Destination not found',
+      });
+    } else {
+      logger.error({ err });
+
+      return {
+        statusCode: 500,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          error: 'INTERNAL_SERVER_ERROR',
+          error_message: 'Internal server error',
+        }),
+      };
+    }
+  }
+
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ event }),
+    body: JSON.stringify({ success: true }),
   };
 };
 
 export const destroy: Handler = async (event, context) => {
   withRequest(event, context);
 
+  const id = event.pathParameters?.id;
+  if (!id) {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        error: 'INVALID_INPUT',
+        error_message: 'Expected destination ID',
+      }),
+    };
+  }
+
+  await store.delete(id);
+
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ event }),
+    body: JSON.stringify({ success: true }),
   };
 };

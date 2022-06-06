@@ -4,7 +4,7 @@ import pino from 'pino';
 import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda';
 
 import { make400, make404 } from '../lambda';
-import { SourceStore } from '../stores/source';
+import { SourceStore } from '../stores';
 import { assertIsAWSError } from '../utils';
 
 const withRequest = lambdaRequestTracker();
@@ -45,6 +45,8 @@ export const create: Handler = async (event, context) => {
       error_message: 'Invalid JSON',
     });
   }
+
+  // TODO(ptr): input validation
 
   const result = await store.create({
     provider: data.provider,
@@ -98,14 +100,27 @@ export const update: Handler = async (event, context) => {
     };
   }
 
+  if (!event.body) {
+    return make400({
+      error_message: 'Expected JSON payload',
+    });
+  }
+
+  let data;
+  try {
+    data = JSON.parse(event.body);
+  } catch (e) {
+    return make400({
+      error_message: 'Invalid JSON',
+    });
+  }
+
+  // TODO(ptr): input validation
+
   try {
     await store.update(id, {
-      credentials: {
-        token: 'secret2',
-      },
-      properties: {
-        foo2: 'bar',
-      },
+      credentials: data.credentials,
+      options: data.options,
     });
   } catch (err: unknown) {
     assertIsAWSError(err);
@@ -133,7 +148,7 @@ export const update: Handler = async (event, context) => {
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ event }),
+    body: JSON.stringify({ success: true }),
   };
 };
 
@@ -157,6 +172,6 @@ export const destroy: Handler = async (event, context) => {
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ event }),
+    body: JSON.stringify({ success: true }),
   };
 };

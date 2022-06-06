@@ -9,6 +9,8 @@ const logger = pino({}, destination);
 export const list: Handler = async (event, context) => {
   withRequest(event, context);
 
+  logger.info({ msg: 'received unimplemented `GET /jobs`' });
+
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
