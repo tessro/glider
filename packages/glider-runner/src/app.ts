@@ -91,6 +91,7 @@ async function main() {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function getCredentialsProvider(options: any): CredentialsProvider {
     if (options?.provider) {
       const provider = context.credentials.get(options.provider);

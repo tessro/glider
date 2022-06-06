@@ -15,6 +15,7 @@ import { sleep } from './utils';
 interface JobOptions {
   id: string;
   context: Context;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   credentials: Record<string, any>;
   source: Source;
   destination: Destination;
