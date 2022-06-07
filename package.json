@@ -14,6 +14,7 @@
     "build": "tsc -b tsconfig.build.json",
     "build:watch": "npm run build -- --watch",
     "check-all": "npm run lint && npm run typecheck && npm run test",
+    "clean": "npm run --workspaces --if-present clean",
     "fmt": "npm run prettier",
     "lint": "eslint packages",
     "prettier": "prettier -w .",

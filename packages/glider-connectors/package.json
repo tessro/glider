@@ -15,6 +15,7 @@
     }
   },
   "scripts": {
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "test": "jest"
   },
   "dependencies": {
