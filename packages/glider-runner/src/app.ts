@@ -1,11 +1,11 @@
 import { CredentialsProvider } from 'glider';
-import pino from 'pino';
+import { pino } from 'pino';
 import { v4 as uuidv4 } from 'uuid';
 import yargs from 'yargs';
 
-import { InMemoryContext } from './context';
-import { Job } from './job';
-import { loadPlugins } from './plugins';
+import { InMemoryContext } from './context.js';
+import { Job } from './job.js';
+import { loadPlugins } from './plugins.js';
 
 const logger = pino();
 

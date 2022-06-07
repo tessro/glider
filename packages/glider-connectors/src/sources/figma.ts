@@ -1,7 +1,7 @@
 import type { Source, Stream } from 'glider';
-import pino from 'pino';
+import { pino } from 'pino';
 
-import type { Response } from '../types';
+import type { Response } from '../types.js';
 
 interface Options {
   team: string;

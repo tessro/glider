@@ -1,9 +1,9 @@
 import { URL } from 'url';
 
 import type { Context, Source, Stream } from 'glider';
-import pino from 'pino';
+import { pino } from 'pino';
 
-import type { Response } from '../types';
+import type { Response } from '../types.js';
 
 interface Options {
   cloudId: string;

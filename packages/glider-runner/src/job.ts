@@ -7,10 +7,10 @@ import {
   CredentialsProvider,
 } from 'glider';
 import got from 'got';
-import pino, { Logger } from 'pino';
+import { pino, Logger } from 'pino';
 
-import { Context } from './context';
-import { sleep } from './utils';
+import { Context } from './context.js';
+import { sleep } from './utils.js';
 
 interface JobOptions {
   id: string;

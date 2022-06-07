@@ -18,10 +18,10 @@ import {
   PluginExports,
 } from 'glider';
 import mkdirp from 'mkdirp';
-import pino from 'pino';
+import { pino } from 'pino';
 import { fromBuffer, ZipFile } from 'yauzl';
 
-import { Context } from './context';
+import { Context } from './context.js';
 
 interface Plugin extends PluginExports {
   name: string;

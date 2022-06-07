@@ -1,4 +1,4 @@
-export * from './types';
+export * from './types.js';
 
-export * from './sources';
-export * from './destinations';
+export * from './sources.js';
+export * from './destinations.js';

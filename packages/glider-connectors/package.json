@@ -2,10 +2,18 @@
   "name": "@glider/connectors",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "description": "Glider connectors",
   "author": "Balsa, Inc.",
   "license": "MIT",
-  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      }
+    }
+  },
   "scripts": {
     "build": "tsc",
     "test": "jest"
