@@ -19,6 +19,7 @@ const recordSchema = z.object({
   destinationId: z.string(),
   schedule: z.string(),
   currentJobId: z.string().optional(),
+  executionArn: z.string().optional(),
   lastRanAt: z.number().optional(),
   createdAt: z.number(),
 });
@@ -33,6 +34,7 @@ export interface Connection {
   destinationId: string;
   schedule: string;
   currentJobId: string | null;
+  executionArn: string | null;
   lastRanAt?: Date;
   createdAt: Date;
 }
@@ -50,6 +52,7 @@ function format(item: unknown): Connection {
     destinationId,
     schedule,
     currentJobId,
+    executionArn,
     createdAt,
     lastRanAt,
   } = recordSchema.parse(item);
@@ -61,6 +64,7 @@ function format(item: unknown): Connection {
     destinationId,
     schedule,
     currentJobId: currentJobId ?? null,
+    executionArn: executionArn ?? null,
     lastRanAt: lastRanAt ? new Date(lastRanAt) : undefined,
     createdAt: new Date(createdAt),
   };
@@ -133,6 +137,7 @@ export class ConnectionStore {
       destinationId: input.destinationId,
       schedule: input.schedule,
       currentJobId: null,
+      executionArn: null,
       createdAt: new Date(now),
     };
   }
