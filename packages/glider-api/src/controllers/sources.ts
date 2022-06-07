@@ -11,9 +11,13 @@ const withRequest = lambdaRequestTracker();
 const destination = pinoLambdaDestination();
 const logger = pino({}, destination);
 
+if (!process.env.DYNAMODB_TABLE_NAME) {
+  throw new Error(`Missing required environment variable $DYNAMODB_TABLE_NAME`);
+}
+
 const store = new SourceStore({
   client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
-  tableName: 'paul-glider-Table',
+  tableName: process.env.DYNAMODB_TABLE_NAME,
 });
 
 export const list: Handler = async (event, context) => {

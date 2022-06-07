@@ -19,9 +19,13 @@ if (!process.env.WORKER_STATE_MACHINE_ARN) {
 }
 const stateMachineArn = process.env.WORKER_STATE_MACHINE_ARN;
 
+if (!process.env.DYNAMODB_TABLE_NAME) {
+  throw new Error(`Missing required environment variable $DYNAMODB_TABLE_NAME`);
+}
+
 const store = new ConnectionStore({
   client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
-  tableName: 'paul-glider-Table',
+  tableName: process.env.DYNAMODB_TABLE_NAME,
 });
 
 export const list: Handler = async (event, context) => {
