@@ -24,6 +24,7 @@
     "api:diff": "npm run -w @glider/api diff",
     "api:remove": "npm run -w @glider/api remove",
     "api:start": "npm run -w @glider/api start",
+    "sst:update": "npx -w @glider/api sst update",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "typecheck": "npm run build"
   },
