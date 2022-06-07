@@ -209,6 +209,37 @@ export const destroy: Handler = async (event, context) => {
   };
 };
 
+export const abort: Handler = async (event, context) => {
+  withRequest(event, context);
+
+  const id = event.pathParameters?.id;
+  if (!id) {
+    return make400({
+      error_message: 'Expected connection ID',
+    });
+  }
+
+  const connection = await store.get(id);
+  if (!connection) {
+    return make404({
+      error_message: 'Connection not found',
+    });
+  }
+
+  // TODO(ptr): also cancel SFN execution?
+
+  // Clears `currentJobId`
+  await store.abort(connection.id);
+
+  return {
+    statusCode: 200,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      success: true,
+    }),
+  };
+};
+
 export const run: Handler = async (event, context) => {
   withRequest(event, context);
 

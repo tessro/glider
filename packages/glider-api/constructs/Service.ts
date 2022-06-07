@@ -73,6 +73,7 @@ export class Service extends Construct {
         'GET /connections/{id}': 'src/controllers/connections.get',
         'PUT /connections/{id}': 'src/controllers/connections.update',
         'DELETE /connections/{id}': 'src/controllers/connections.destroy',
+        'POST /connections/{id}/abort': 'src/controllers/connections.abort',
         'POST /connections/{id}/run': 'src/controllers/connections.run',
 
         // Jobs
