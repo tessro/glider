@@ -6,14 +6,8 @@
   "description": "Glider connectors",
   "author": "Balsa, Inc.",
   "license": "MIT",
-  "exports": {
-    ".": {
-      "import": {
-        "default": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      }
-    }
-  },
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "test": "jest"
