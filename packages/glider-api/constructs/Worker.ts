@@ -112,7 +112,7 @@ export class Worker extends Construct {
     });
 
     // Ensure the worker can read the S3 bucket containing plugins
-    this.props.plugins?.bucket.grantRead(taskDefinition.obtainExecutionRole());
+    this.props.plugins?.bucket.grantRead(taskDefinition.taskRole);
 
     // Step Functions has built-in support for starting execution of Step
     // Functions, but we can't use it because it from here, since it would
