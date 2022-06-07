@@ -33,6 +33,12 @@ export class Service extends Construct {
       },
     });
 
+    // TODO(ptr): state machine should talk to API
+    const worker = new Worker(this, 'Worker', {
+      table,
+      plugins: props.plugins,
+    });
+
     // The management API
     this.api = new Api(this, 'Api', {
       defaults: {
@@ -72,9 +78,9 @@ export class Service extends Construct {
       },
     });
 
-    this.api.attachPermissions([table]);
-
-    // TODO(ptr): state machine should talk to API
-    new Worker(this, 'Worker', { table, plugins: props.plugins });
+    this.api.attachPermissions([
+      table,
+      [worker.stateMachine, 'grantStartExecution'],
+    ]);
   }
 }
