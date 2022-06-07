@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandlerV2 as Handler } from 'aws-lambda';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDB, StepFunctions } from 'aws-sdk';
 import pino from 'pino';
 import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda';
 
@@ -10,6 +10,14 @@ import { assertIsAWSError } from '../utils';
 const withRequest = lambdaRequestTracker();
 const destination = pinoLambdaDestination();
 const logger = pino({}, destination);
+
+const sfn = new StepFunctions({ apiVersion: '2016-11-23' });
+if (!process.env.WORKER_STATE_MACHINE_ARN) {
+  throw new Error(
+    `Missing required environment variable: $WORKER_STATE_MACHINE_ARN`
+  );
+}
+const stateMachineArn = process.env.WORKER_STATE_MACHINE_ARN;
 
 const store = new ConnectionStore({
   client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
@@ -53,6 +61,20 @@ export const create: Handler = async (event, context) => {
     sourceId: data.sourceId,
     destinationId: data.destinationId,
   });
+
+  // Invoke first run of the state machine
+  await sfn
+    .startExecution({
+      stateMachineArn,
+      input: JSON.stringify({
+        connectionId: result.id,
+        restart: {
+          executionCount: 0,
+          stateMachineArn,
+        },
+      }),
+    })
+    .promise();
 
   return {
     statusCode: 201,
@@ -143,6 +165,8 @@ export const update: Handler = async (event, context) => {
       };
     }
   }
+
+  // TODO(ptr): invoke state machine, if schedule is tighter
 
   return {
     statusCode: 200,
