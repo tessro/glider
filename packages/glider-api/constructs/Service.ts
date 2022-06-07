@@ -46,6 +46,7 @@ export class Service extends Construct {
         function: {
           environment: {
             DYNAMODB_TABLE_NAME: table.tableName,
+            WORKER_STATE_MACHINE_ARN: worker.stateMachine.stateMachineArn,
           },
         },
       },
