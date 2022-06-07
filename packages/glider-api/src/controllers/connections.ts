@@ -70,7 +70,7 @@ export const create: Handler = async (event, context) => {
   });
 
   // Invoke first run of the state machine
-  await sfn
+  const execution = await sfn
     .startExecution({
       stateMachineArn,
       input: JSON.stringify({
@@ -83,6 +83,8 @@ export const create: Handler = async (event, context) => {
       }),
     })
     .promise();
+
+  await store.setExecutionArn(result.id, execution.executionArn);
 
   return {
     statusCode: 201,

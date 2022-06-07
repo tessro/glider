@@ -224,6 +224,35 @@ export class ConnectionStore {
     return true;
   }
 
+  async setExecutionArn(id: string, arn: string): Promise<void> {
+    try {
+      await this.client
+        .update({
+          TableName: this.tableName,
+          Key: { pk: `connection#${id}`, sk: `metadata#${id}` },
+          ConditionExpression: 'attribute_exists(pk)',
+          UpdateExpression: 'SET #executionArn = :executionArn',
+          ExpressionAttributeNames: {
+            '#executionArn': 'executionArn',
+          },
+          ExpressionAttributeValues: {
+            ':executionArn': arn,
+          },
+        })
+        .promise();
+    } catch (e) {
+      assertIsAWSError(e);
+      // If we get a conditional check failure, that means the item is missing
+      if (e.code === 'ConditionalCheckFailedException') {
+        throw new Error(
+          `Can't set execution ARN for missing connection with ID '${id}'`
+        );
+      } else {
+        throw e;
+      }
+    }
+  }
+
   async delete(id: string): Promise<void> {
     await this.client
       .delete({

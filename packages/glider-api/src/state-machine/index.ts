@@ -183,13 +183,20 @@ export const invokeSelf: Handler = async (event, context) => {
 
   logger.info({
     msg: 'Invoking another execution of the state machine',
+    connectionId: event.connectionId,
+    stateMachineArn: event.restart.stateMachineArn,
+  });
+
+  const db = makeStores({
+    client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
+    tableName: event.dynamoDbTableName,
   });
 
   const sfn = new StepFunctions({
     apiVersion: '2016-11-23',
   });
 
-  await sfn
+  const execution = await sfn
     .startExecution({
       stateMachineArn: event.restart.stateMachineArn,
       input: JSON.stringify({
@@ -201,4 +208,19 @@ export const invokeSelf: Handler = async (event, context) => {
       }),
     })
     .promise();
+
+  logger.info({
+    msg: `Successfully invoked another execution for connection '${event.connectionId}'`,
+    connectionId: event.connectionId,
+    execution: {
+      arn: execution.executionArn,
+      startDate: execution.startDate,
+    },
+    stateMachineArn: event.restart.stateMachineArn,
+  });
+
+  await db.connections.setExecutionArn(
+    event.connectionId,
+    execution.executionArn
+  );
 };
