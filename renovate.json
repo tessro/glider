@@ -12,6 +12,10 @@
       "automerge": true
     },
     {
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "/^\\d*[02468]\\./"
+    },
+    {
       "matchPackagePrefixes": ["@serverless-stack/"],
       "groupName": "Serverless Stack monorepo"
     },
