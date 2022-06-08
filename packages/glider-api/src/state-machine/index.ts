@@ -201,6 +201,7 @@ export const invokeSelf: Handler = async (event, context) => {
       stateMachineArn: event.restart.stateMachineArn,
       input: JSON.stringify({
         connectionId: event.connectionId,
+        dynamoDbTableName: event.dynamoDbTableName,
         restart: {
           executionCount: event.restart.executionCount + 1,
           stateMachineArn: event.restart.stateMachineArn,
