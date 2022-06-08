@@ -42,3 +42,4 @@ packages/*
 # ensure they exactly match the state of the repository.
 **/dist
 **/tmp
+**/tsconfig.tsbuildinfo
