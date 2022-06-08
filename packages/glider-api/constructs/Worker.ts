@@ -189,7 +189,9 @@ export class Worker extends Construct {
     invokeSelfFn.role?.addToPrincipalPolicy(
       new iam.PolicyStatement({
         actions: ['states:StartExecution'],
-        resources: [`arn:aws:states:*:*:stateMachine:GliderStateMachine*`],
+        resources: [
+          `arn:aws:states:*:*:stateMachine:GliderWorkerStateMachine*`,
+        ],
       })
     );
 
