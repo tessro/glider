@@ -198,5 +198,6 @@ export class Worker extends Construct {
     this.props.table.grantReadWriteData(beforeSyncFn);
     this.props.table.grantReadWriteData(afterSyncFn);
     this.props.table.grantReadData(afterSleepFn);
+    this.props.table.grantWriteData(invokeSelfFn);
   }
 }
