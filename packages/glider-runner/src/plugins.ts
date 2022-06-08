@@ -1,5 +1,6 @@
 import { createWriteStream } from 'fs';
 import * as fs from 'fs/promises';
+import { createRequire } from 'module';
 import * as path from 'path';
 import { join, dirname } from 'path';
 import type { Readable } from 'stream';
@@ -77,6 +78,10 @@ async function loadPlugin(path: string, context: Context): Promise<Plugin> {
   const module = {
     exports: {},
   };
+
+  // Plugins are CommonJS, so they need a `require` function. The ESM context
+  // doesn't include one, so we need to make one.
+  const require = createRequire(import.meta.url);
 
   // This object becomes the global namespace in the plugin's execution context
   const ctx = {
