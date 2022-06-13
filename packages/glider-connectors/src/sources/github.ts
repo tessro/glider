@@ -1,4 +1,4 @@
-import type { Context, Source, Stream } from 'glider';
+import type { Context, Source, Stream } from '@balsahq/glider';
 import { pino } from 'pino';
 
 import parseLinkHeader from '../parseLinkHeader.js';

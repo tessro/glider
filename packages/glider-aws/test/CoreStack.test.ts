@@ -5,7 +5,7 @@ import { CoreStack } from '../stacks/CoreStack';
 
 // Help SST find our Lambdas. This is needed because we reference Lambdas
 // relative to this workspace, but Jest runs from the repository root.
-process.chdir('packages/glider-api');
+process.chdir('packages/glider-aws');
 
 test('Core Stack', () => {
   const app = new App();

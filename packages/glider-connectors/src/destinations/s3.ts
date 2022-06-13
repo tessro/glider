@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { Destination } from '@balsahq/glider';
 import { default as dateFormat } from 'dateformat';
-import { Destination } from 'glider';
 import { v4 as uuidv4 } from 'uuid';
 
 interface S3DestinationOptions {

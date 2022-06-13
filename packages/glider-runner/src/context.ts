@@ -1,3 +1,4 @@
+import { Constructor, CredentialsProvider, Source, Destination } from '@balsahq/glider';
 import {
   MysqlDestination,
   S3Destination,
@@ -5,8 +6,7 @@ import {
   FigmaSource,
   GitHubSource,
   JiraSource,
-} from '@glider/connectors';
-import { Constructor, CredentialsProvider, Source, Destination } from 'glider';
+} from '@balsahq/glider-connectors';
 
 export class Registry<T> {
   private entries: Record<string, T> = {};

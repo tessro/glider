@@ -1,8 +1,8 @@
 {
-  "name": "@glider/api",
+  "name": "@balsahq/glider-aws",
   "version": "0.1.0",
   "private": true,
-  "description": "Glider API",
+  "description": "Glider infrastructure for AWS",
   "author": "Balsa, Inc.",
   "license": "MIT",
   "main": "app.js",

@@ -20,10 +20,10 @@ packages/*
 # Include all target packages.
 !packages/glider-runner
 
-# Include all sibling dependencies -- `@glider/*` dependencies must be named here
-# or they won't be accessible at build time.
+# Include all sibling dependencies -- `@balsahq/glider-*` dependencies must be
+# named here or they won't be accessible at build time.
 !packages/glider-connectors
-!packages/glider-types
+!packages/glider
 
 # Exclude config files that aren't used at build time.
 **/babel.config.js

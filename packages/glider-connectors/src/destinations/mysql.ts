@@ -1,4 +1,4 @@
-import { Destination } from 'glider';
+import { Destination } from '@balsahq/glider';
 import {
   createConnection as createMysqlConnection,
   Connection,

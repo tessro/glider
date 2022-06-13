@@ -1,4 +1,4 @@
-import type { Source, Stream } from 'glider';
+import type { Source, Stream } from '@balsahq/glider';
 import { pino } from 'pino';
 
 import type { Response } from '../types.js';

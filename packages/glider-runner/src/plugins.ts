@@ -17,7 +17,7 @@ import {
   Source,
   Destination,
   PluginExports,
-} from 'glider';
+} from '@balsahq/glider';
 import mkdirp from 'mkdirp';
 import { pino } from 'pino';
 import { fromBuffer, ZipFile } from 'yauzl';

@@ -1,5 +1,5 @@
 {
-  "name": "@glider/connectors",
+  "name": "@balsahq/glider-connectors",
   "version": "0.1.0",
   "private": true,
   "type": "module",

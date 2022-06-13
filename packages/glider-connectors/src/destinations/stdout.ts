@@ -1,4 +1,4 @@
-import type { Destination } from 'glider';
+import type { Destination } from '@balsahq/glider';
 import { pino } from 'pino';
 
 export class StdoutDestination implements Destination {

@@ -2,7 +2,7 @@
 
 export type Constructor<T> = new (...args: any[]) => T;
 
-declare module 'glider' {
+declare module '@balsahq/glider' {
   export const version: string;
 
   export interface PluginExports {
@@ -35,8 +35,8 @@ declare module 'glider' {
   export interface Source {
     name: string;
     headers?:
-      | Record<string, string>
-      | ((context: Context) => Record<string, string>);
+    | Record<string, string>
+    | ((context: Context) => Record<string, string>);
     requestSpacing?: number | ((response: Response) => number);
     streams: Stream[];
   }

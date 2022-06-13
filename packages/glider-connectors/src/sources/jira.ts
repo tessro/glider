@@ -1,6 +1,6 @@
 import { URL } from 'url';
 
-import type { Context, Source, Stream } from 'glider';
+import type { Context, Source, Stream } from '@balsahq/glider';
 import { pino } from 'pino';
 
 import type { Response } from '../types.js';
