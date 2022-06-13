@@ -16,10 +16,9 @@
 FROM node:16-bullseye-slim
 
 # TODO(ptr): remove when we switch back to Alpine
-RUN apt-get update && apt-get install -y openssl unzip
+RUN apt-get update && apt-get install -y openssl
 
 # TODO(ptr): re-enable when we switch back to Alpine
-# NOTE(ptr): `unzip` is bundled with Alpine so it's not needed here
 #RUN apk --no-cache add openssl
 
 WORKDIR /app
