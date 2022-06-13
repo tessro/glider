@@ -6,6 +6,11 @@
   "description": "Glider job runner",
   "author": "Balsa, Inc.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/balsa/glider.git",
+    "directory": "packages/glider-runner"
+  },
   "main": "app.js",
   "exports": "dist/index.js",
   "types": "dist/index.d.ts",

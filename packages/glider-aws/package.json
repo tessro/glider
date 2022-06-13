@@ -5,6 +5,11 @@
   "description": "Glider infrastructure for AWS",
   "author": "Balsa, Inc.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/balsa/glider.git",
+    "directory": "packages/glider-aws"
+  },
   "main": "app.js",
   "scripts": {
     "build": "sst build",
