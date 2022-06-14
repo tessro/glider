@@ -51,8 +51,6 @@ export class Service extends Construct {
         },
       },
       routes: {
-        'GET /': 'src/lambda.handler',
-
         // Sources
         'GET /sources': 'src/controllers/sources.list',
         'POST /sources': 'src/controllers/sources.create',
