@@ -1,7 +1,6 @@
 {
   "name": "@balsahq/glider",
   "version": "0.1.0",
-  "private": true,
   "description": "Lightweight, serverless ELT framework",
   "author": "Balsa, Inc.",
   "license": "MIT",

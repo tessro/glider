@@ -1,7 +1,6 @@
 {
   "name": "@balsahq/glider-aws",
   "version": "0.1.0",
-  "private": true,
   "description": "Glider infrastructure for AWS",
   "author": "Balsa, Inc.",
   "license": "MIT",
