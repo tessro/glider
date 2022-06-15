@@ -23,6 +23,7 @@ interface ServiceProps {
 
 export class Service extends Construct {
   public readonly api: Api;
+  public readonly worker: Worker;
 
   constructor(scope: Stack, id: string, props: ServiceProps = {}) {
     super(scope, id);
@@ -42,7 +43,7 @@ export class Service extends Construct {
     });
 
     // TODO(ptr): state machine should talk to API
-    const worker = new Worker(this, 'Worker', {
+    this.worker = new Worker(this, 'Worker', {
       table,
       plugins: props.plugins,
       logging: props.worker?.logging,
@@ -55,7 +56,7 @@ export class Service extends Construct {
         function: {
           environment: {
             DYNAMODB_TABLE_NAME: table.tableName,
-            WORKER_STATE_MACHINE_ARN: worker.stateMachine.stateMachineArn,
+            WORKER_STATE_MACHINE_ARN: this.worker.stateMachine.stateMachineArn,
           },
         },
       },
@@ -90,7 +91,7 @@ export class Service extends Construct {
 
     this.api.attachPermissions([
       table,
-      [worker.stateMachine, 'grantStartExecution'],
+      [this.worker.stateMachine, 'grantStartExecution'],
     ]);
   }
 }
