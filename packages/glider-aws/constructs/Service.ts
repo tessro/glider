@@ -17,7 +17,7 @@ interface ServiceProps {
     bucket: s3.IBucket;
   };
   worker?: {
-    logging: ecs.LogDriver;
+    logging?: ecs.LogDriver;
   };
 }
 
