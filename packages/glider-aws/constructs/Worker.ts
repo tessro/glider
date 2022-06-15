@@ -27,6 +27,7 @@ const defaultProps: Partial<WorkerProps> = {
 
 export class Worker extends Construct {
   public readonly stateMachine: sfn.StateMachine;
+  public readonly taskDefinition: ecs.TaskDefinition;
 
   private readonly props: WorkerProps;
 
@@ -77,7 +78,7 @@ export class Worker extends Construct {
       containerInsights: true,
     });
 
-    const taskDefinition = new ecs.FargateTaskDefinition(
+    this.taskDefinition = new ecs.FargateTaskDefinition(
       this,
       'TaskDefinition',
       {
@@ -89,7 +90,7 @@ export class Worker extends Construct {
       }
     );
 
-    const containerDefinition = taskDefinition.addContainer('Worker', {
+    const containerDefinition = this.taskDefinition.addContainer('Worker', {
       image: ecs.ContainerImage.fromAsset('../..', {
         file: 'packages/glider-runner/Dockerfile',
       }),
@@ -103,7 +104,7 @@ export class Worker extends Construct {
       cluster,
       integrationPattern: sfn.IntegrationPattern.RUN_JOB,
       launchTarget: new tasks.EcsFargateLaunchTarget(),
-      taskDefinition,
+      taskDefinition: this.taskDefinition,
       containerOverrides: [
         {
           containerDefinition,
@@ -114,7 +115,7 @@ export class Worker extends Construct {
     });
 
     // Ensure the worker can read the S3 bucket containing plugins
-    this.props.plugins?.bucket.grantRead(taskDefinition.taskRole);
+    this.props.plugins?.bucket.grantRead(this.taskDefinition.taskRole);
 
     // Step Functions has built-in support for starting execution of Step
     // Functions, but we can't use it because it from here, since it would
