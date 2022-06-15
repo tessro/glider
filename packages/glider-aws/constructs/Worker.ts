@@ -12,6 +12,7 @@ import {
 import { Construct } from 'constructs';
 
 interface WorkerProps {
+  logging?: ecs.LogDriver,
   plugins?: {
     bucket: s3.IBucket;
   };
@@ -20,6 +21,7 @@ interface WorkerProps {
 }
 
 const defaultProps: Partial<WorkerProps> = {
+  logging: ecs.LogDrivers.awsLogs({ streamPrefix: 'glider' }),
   timeout: Duration.hours(24),
 };
 
@@ -94,7 +96,7 @@ export class Worker extends Construct {
       environment: {
         PLUGINS_BUCKET_NAME: this.props.plugins?.bucket.bucketName ?? '',
       },
-      logging: ecs.LogDrivers.awsLogs({ streamPrefix: 'glider' }),
+      logging: props.logging,
     });
 
     const syncTask = new tasks.EcsRunTask(this, 'Sync', {
