@@ -1,5 +1,10 @@
 import { Api } from '@serverless-stack/resources';
-import { Stack, aws_dynamodb as dynamodb, aws_s3 as s3 } from 'aws-cdk-lib';
+import {
+  Stack,
+  aws_dynamodb as dynamodb,
+  aws_ecs as ecs,
+  aws_s3 as s3,
+} from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 import { Worker } from './Worker';
@@ -10,6 +15,9 @@ interface ServiceProps {
   };
   plugins?: {
     bucket: s3.IBucket;
+  };
+  worker?: {
+    logging: ecs.LogDriver;
   };
 }
 
@@ -37,6 +45,7 @@ export class Service extends Construct {
     const worker = new Worker(this, 'Worker', {
       table,
       plugins: props.plugins,
+      logging: props.worker?.logging,
     });
 
     // The management API
