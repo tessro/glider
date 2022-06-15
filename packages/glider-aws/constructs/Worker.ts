@@ -12,7 +12,7 @@ import {
 import { Construct } from 'constructs';
 
 interface WorkerProps {
-  logging?: ecs.LogDriver,
+  logging?: ecs.LogDriver;
   plugins?: {
     bucket: s3.IBucket;
   };

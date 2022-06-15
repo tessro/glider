@@ -1,4 +1,9 @@
-import { Constructor, CredentialsProvider, Source, Destination } from '@balsahq/glider';
+import {
+  Constructor,
+  CredentialsProvider,
+  Source,
+  Destination,
+} from '@balsahq/glider';
 import {
   MysqlDestination,
   S3Destination,
