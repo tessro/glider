@@ -78,5 +78,5 @@ module.exports = {
     },
   ],
 
-  ignorePatterns: ['**/dist'],
+  ignorePatterns: ['**/cdk.out', '**/dist'],
 };

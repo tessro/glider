@@ -14,10 +14,6 @@ dist
 .DS_Store
 Session.vim
 
-# sst build output
-.build
-.sst
-
 # tsc build output
 tsconfig.tsbuildinfo
 

@@ -16,7 +16,6 @@
     "aws:diff": "npm run -w @balsahq/glider-aws diff",
     "aws:remove": "npm run -w @balsahq/glider-aws remove",
     "aws:start": "npm run -w @balsahq/glider-aws start",
-    "aws:sst:update": "npx -w @balsahq/glider-aws sst update",
     "build": "tsc -b tsconfig.build.json",
     "build:watch": "npm run build -- --watch",
     "check-all": "npm run lint && npm run typecheck && npm run test",

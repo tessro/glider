@@ -1,10 +1,10 @@
-import * as sst from '@serverless-stack/resources';
 import {
   Duration,
   aws_dynamodb as dynamodb,
   aws_ecs as ecs,
   aws_iam as iam,
-  aws_logs as logs,
+  aws_lambda as lambda,
+  aws_lambda_nodejs as nodejs,
   aws_s3 as s3,
   aws_stepfunctions as sfn,
   aws_stepfunctions_tasks as tasks,
@@ -39,20 +39,32 @@ export class Worker extends Construct {
       ...props,
     };
 
-    const beforeSyncFn = new sst.Function(this, 'BeforeSyncFn', {
-      handler: 'src/state-machine/index.beforeSync',
+    const beforeSyncFn = new nodejs.NodejsFunction(this, 'BeforeSyncFn', {
+      architecture: lambda.Architecture.ARM_64,
+      runtime: lambda.Runtime.NODEJS_16_X,
+      entry: 'src/state-machine/index.ts',
+      handler: 'beforeSync',
     });
 
-    const afterSyncFn = new sst.Function(this, 'AfterSyncFn', {
-      handler: 'src/state-machine/index.afterSync',
+    const afterSyncFn = new nodejs.NodejsFunction(this, 'AfterSyncFn', {
+      architecture: lambda.Architecture.ARM_64,
+      runtime: lambda.Runtime.NODEJS_16_X,
+      entry: 'src/state-machine/index.ts',
+      handler: 'afterSync',
     });
 
-    const afterSleepFn = new sst.Function(this, 'AfterSleepFn', {
-      handler: 'src/state-machine/index.afterSleep',
+    const afterSleepFn = new nodejs.NodejsFunction(this, 'AfterSleepFn', {
+      architecture: lambda.Architecture.ARM_64,
+      runtime: lambda.Runtime.NODEJS_16_X,
+      entry: 'src/state-machine/index.ts',
+      handler: 'afterSleep',
     });
 
-    const invokeSelfFn = new sst.Function(this, 'InvokeSelfFn', {
-      handler: 'src/state-machine/index.invokeSelf',
+    const invokeSelfFn = new nodejs.NodejsFunction(this, 'InvokeSelfFn', {
+      architecture: lambda.Architecture.ARM_64,
+      runtime: lambda.Runtime.NODEJS_16_X,
+      entry: 'src/state-machine/index.ts',
+      handler: 'invokeSelf',
     });
 
     const beforeSync = new tasks.LambdaInvoke(this, 'Before sync', {
@@ -169,19 +181,9 @@ export class Worker extends Construct {
         .otherwise(unknownAction)
     );
 
+    // TODO(ptr): allow user to configure Step Functions logging
     this.stateMachine = new sfn.StateMachine(this, 'StateMachine', {
       definition,
-      logs: {
-        destination: new logs.LogGroup(this, 'Glider', {
-          // TODO(ptr): switch to prefixes when support is added
-          // See: https://github.com/aws/aws-cdk/issues/19353
-          // In the meantime, changes to this log group that require a
-          // remove-and-replace will cause a CloudFormation error. If that
-          // becomes a maintenance issue we can make this configurable.
-          logGroupName: '/aws/vendedlogs/states/glider',
-        }),
-        level: sfn.LogLevel.ALL,
-      },
       timeout: this.props.timeout,
     });
 

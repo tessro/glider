@@ -11,14 +11,16 @@
   },
   "main": "app.js",
   "scripts": {
-    "build": "sst build",
-    "deploy": "sst deploy",
-    "diff": "sst diff",
-    "remove": "sst remove",
-    "start": "sst start"
+    "build": "cdk synth",
+    "deploy": "cdk deploy",
+    "diff": "cdk diff",
+    "remove": "cdk remove",
+    "start": "sam local start-api -t cdk.out/GliderStack.template.json"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.105.0",
+    "aws-cdk": "2.24.0",
+    "aws-cdk-lib": "2.24.0",
     "cron-parser": "4.4.0",
     "pino": "8.0.0",
     "pino-lambda": "4.0.0",
@@ -26,12 +28,9 @@
     "zod": "3.17.3"
   },
   "devDependencies": {
-    "@serverless-stack/cli": "1.2.18",
-    "@serverless-stack/resources": "1.2.18",
     "@tsconfig/node16": "1.0.2",
     "@types/aws-lambda": "8.10.100",
     "@types/uuid": "8.3.4",
-    "aws-cdk-lib": "2.24.0",
     "pino-pretty": "8.0.0"
   }
 }

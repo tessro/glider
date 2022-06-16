@@ -1,4 +1,4 @@
-import { APIGatewayProxyResultV2 as Response } from 'aws-lambda';
+import { APIGatewayProxyResult as Response } from 'aws-lambda';
 
 function makeResponse(statusCode: number, props: object): Response {
   return {

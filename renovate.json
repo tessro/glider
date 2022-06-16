@@ -16,10 +16,6 @@
       "allowedVersions": "/^\\d*[02468]\\./"
     },
     {
-      "matchPackagePrefixes": ["@serverless-stack/"],
-      "groupName": "Serverless Stack monorepo"
-    },
-    {
       "matchPackageNames": ["node"],
       "matchDatasources": ["docker"],
       "allowedVersions": "/^\\d*[02468]\\./"
