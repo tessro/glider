@@ -36,7 +36,7 @@ RUN npm ci
 COPY tsconfig.json .
 COPY tsconfig.build.json .
 
-COPY packages/glider-types packages/glider-types
+COPY packages/glider packages/glider
 COPY packages/glider-connectors packages/glider-connectors
 COPY packages/glider-runner packages/glider-runner
 
