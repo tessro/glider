@@ -25,9 +25,9 @@
     "start": "sam local start-api -t cdk.out/GliderStack.template.json"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.105.0",
-    "aws-cdk": "2.24.0",
-    "aws-cdk-lib": "2.24.0",
+    "@aws-sdk/client-s3": "3.113.0",
+    "aws-cdk": "2.28.1",
+    "aws-cdk-lib": "2.28.1",
     "cron-parser": "4.4.0",
     "pino": "8.0.0",
     "pino-lambda": "4.0.0",
@@ -35,7 +35,7 @@
     "zod": "3.17.3"
   },
   "devDependencies": {
-    "@tsconfig/node16": "1.0.2",
+    "@tsconfig/node16": "1.0.3",
     "@types/aws-lambda": "8.10.100",
     "@types/uuid": "8.3.4",
     "pino-pretty": "8.0.0"

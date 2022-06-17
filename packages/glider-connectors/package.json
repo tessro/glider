@@ -24,7 +24,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.105.0",
+    "@aws-sdk/client-s3": "3.113.0",
     "dateformat": "5.0.3",
     "mysql2": "2.3.3",
     "pino": "8.0.0",
