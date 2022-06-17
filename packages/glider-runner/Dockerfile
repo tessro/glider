@@ -1,6 +1,5 @@
-# Prisma binaries doesn't run on Alpine on ARM yet, so we use Debian instead. We
-# specify `bullseye` to avoid problems observed with the default `16` which uses
-# `buster`. On Docker for Mac, `buster` occasionally takes 5s to resolve
+# We specify `bullseye` to avoid problems observed with the default `16` which
+# uses `buster`. On Docker for Mac, `buster` occasionally takes 5s to resolve
 # `host.docker.internal`, leading to Prisma connection timeouts.
 #
 # See related issue in Docker for Mac's GitHub repo:
@@ -9,17 +8,10 @@
 # NOTE(ptr): Node 18 uses `bullseye` by default, so we can remove the OS version
 # spec when we upgrade.
 #
-# TODO(ptr): don't forget to update the base image in the binary-fetching script
-# in @balsa/glider-plugin when you switch back to Alpine!
-#
 # Issue: https://github.com/prisma/prisma/issues/8478
 FROM node:16-bullseye-slim
 
-# TODO(ptr): remove when we switch back to Alpine
 RUN apt-get update && apt-get install -y openssl
-
-# TODO(ptr): re-enable when we switch back to Alpine
-#RUN apk --no-cache add openssl
 
 WORKDIR /app
 
