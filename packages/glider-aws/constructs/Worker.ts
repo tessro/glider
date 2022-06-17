@@ -6,6 +6,7 @@ import {
   aws_lambda as lambda,
   aws_lambda_nodejs as nodejs,
   aws_s3 as s3,
+  aws_secretsmanager as secretsmanager,
   aws_stepfunctions as sfn,
   aws_stepfunctions_tasks as tasks,
 } from 'aws-cdk-lib';
@@ -103,8 +104,12 @@ export class Worker extends Construct {
     );
 
     const containerDefinition = this.taskDefinition.addContainer('Worker', {
-      image: ecs.ContainerImage.fromAsset('../..', {
-        file: 'packages/glider-runner/Dockerfile',
+      image: ecs.ContainerImage.fromRegistry('balsahq/glider-runner', {
+        credentials: secretsmanager.Secret.fromSecretNameV2(
+          this,
+          'ContainerRegistryCredentials',
+          'Glider/ContainerRegistryCredentials'
+        ),
       }),
       environment: {
         PLUGINS_BUCKET_NAME: this.props.plugins?.bucket.bucketName ?? '',
