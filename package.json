@@ -1,15 +1,6 @@
 {
-  "name": "@balsa/glider",
-  "description": "Lightweight, serverless ELT",
-  "version": "0.1.0",
-  "license": "MIT",
   "private": true,
   "type": "module",
-  "homepage": "https://github.com/balsa/glider",
-  "repository": "github:balsa/glider",
-  "bugs": {
-    "url": "https://github.com/balsa/glider/issues"
-  },
   "scripts": {
     "aws:build": "npm run -w @balsahq/glider-aws build",
     "aws:deploy": "npm run -w @balsahq/glider-aws deploy",
