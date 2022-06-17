@@ -4,8 +4,8 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:import/typescript',
     'plugin:import/recommended',
+    'plugin:import/typescript',
     'plugin:jest/recommended',
     'plugin:jest/style',
 
@@ -18,6 +18,7 @@ module.exports = {
     'no-console': 'error',
     'import/named': 'off',
     'import/no-named-as-default': 'off', // very noisy and not always desirable
+    'import/no-unresolved': 'off', // TypeScript catches these
     'import/order': [
       'error',
       {
