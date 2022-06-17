@@ -5,10 +5,17 @@
   "description": "Glider job runner",
   "author": "Balsa, Inc.",
   "license": "MIT",
+  "homepage": "https://github.com/balsa/glider",
+  "bugs": {
+    "url": "https://github.com/balsa/glider/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/balsa/glider.git",
     "directory": "packages/glider-runner"
+  },
+  "engines": {
+    "node": ">= 14"
   },
   "main": "app.js",
   "exports": "dist/index.js",
