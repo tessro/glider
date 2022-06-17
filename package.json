@@ -16,6 +16,7 @@
     "prettier": "prettier -w .",
     "prettier:check": "prettier -c .",
     "publish": "npm publish --workspaces",
+    "release": "npm run build && npm run publish",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "typecheck": "npm run build"
   },
