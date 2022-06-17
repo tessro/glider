@@ -17,6 +17,7 @@ interface WorkerProps {
   plugins?: {
     bucket: s3.IBucket;
   };
+  runnerImage?: string;
   table: dynamodb.ITable;
   timeout?: Duration;
 }
@@ -103,8 +104,9 @@ export class Worker extends Construct {
       }
     );
 
+    const imageName = props.runnerImage ?? 'balsahq/glider-runner';
     const containerDefinition = this.taskDefinition.addContainer('Worker', {
-      image: ecs.ContainerImage.fromRegistry('balsahq/glider-runner', {
+      image: ecs.ContainerImage.fromRegistry(imageName, {
         credentials: secretsmanager.Secret.fromSecretNameV2(
           this,
           'ContainerRegistryCredentials',
