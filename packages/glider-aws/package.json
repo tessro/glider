@@ -25,7 +25,8 @@
     "deploy": "cdk deploy",
     "diff": "cdk diff",
     "remove": "cdk remove",
-    "start": "sam local start-api -t cdk.out/GliderStack.template.json"
+    "start": "sam local start-api -t cdk.out/GliderStack.template.json",
+    "test": "jest"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.113.0",
@@ -44,5 +45,11 @@
     "@types/uuid": "8.3.4",
     "aws-sdk": "2.1157.0",
     "pino-pretty": "8.0.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ]
   }
 }
