@@ -1,3 +1,5 @@
+import { join as pathJoin } from 'path';
+
 import {
   Duration,
   aws_dynamodb as dynamodb,
@@ -44,28 +46,28 @@ export class Worker extends Construct {
     const beforeSyncFn = new nodejs.NodejsFunction(this, 'BeforeSyncFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: 'src/state-machine/index.ts',
+      entry: pathJoin(__dirname, '../src/state-machine/index.js'),
       handler: 'beforeSync',
     });
 
     const afterSyncFn = new nodejs.NodejsFunction(this, 'AfterSyncFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: 'src/state-machine/index.ts',
+      entry: pathJoin(__dirname, '../src/state-machine/index.js'),
       handler: 'afterSync',
     });
 
     const afterSleepFn = new nodejs.NodejsFunction(this, 'AfterSleepFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: 'src/state-machine/index.ts',
+      entry: pathJoin(__dirname, '../src/state-machine/index.js'),
       handler: 'afterSleep',
     });
 
     const invokeSelfFn = new nodejs.NodejsFunction(this, 'InvokeSelfFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: 'src/state-machine/index.ts',
+      entry: pathJoin(__dirname, '../src/state-machine/index.js'),
       handler: 'invokeSelf',
     });
 

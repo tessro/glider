@@ -1,3 +1,5 @@
+import { join as pathJoin } from 'path';
+
 import {
   Stack,
   aws_apigateway as apigateway,
@@ -172,7 +174,7 @@ export class Service extends Construct {
     const fn = new nodejs.NodejsFunction(this, `${method}${pathId}Lambda`, {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: `src/controllers/${entry}.ts`,
+      entry: pathJoin(__dirname, `../src/controllers/${entry}.js`),
       handler,
       environment,
     });
