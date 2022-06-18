@@ -3,10 +3,6 @@ import { Template } from 'aws-cdk-lib/assertions';
 
 import { GliderStack } from '../src/stack';
 
-// Help SST find our Lambdas. This is needed because we reference Lambdas
-// relative to this workspace, but Jest runs from the repository root.
-process.chdir('packages/glider-aws');
-
 test('Core Stack', () => {
   const app = new App();
   const stack = new GliderStack(app, 'TestStack', {});
