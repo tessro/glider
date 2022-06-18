@@ -17,6 +17,9 @@
     "node": ">= 14"
   },
   "main": "app.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "cdk synth",
     "deploy": "cdk deploy",
