@@ -202,6 +202,8 @@ export const destroy: Handler = async (event, context) => {
 
   await store.delete(id);
 
+  // TODO(ptr): also cancel SFN execution?
+
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
