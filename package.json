@@ -15,8 +15,7 @@
     "lint": "eslint packages",
     "prettier": "prettier -w .",
     "prettier:check": "prettier -c .",
-    "publish": "npm publish --workspaces",
-    "release": "npm run build && npm run publish",
+    "publish": "npm run build && changeset publish",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "typecheck": "npm run build"
   },
