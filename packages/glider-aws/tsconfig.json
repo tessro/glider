@@ -1,4 +1,8 @@
 {
-  "extends": "@tsconfig/node16",
-  "include": ["bin", "scripts", "src", "test"]
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDirs": ["constructs", "src"],
+    "outDir": "dist"
+  },
+  "include": ["bin", "constructs", "scripts", "src", "test"]
 }
