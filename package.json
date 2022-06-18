@@ -46,6 +46,10 @@
   "jest": {
     "extensionsToTreatAsEsm": [
       ".ts"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
     ]
   }
 }
