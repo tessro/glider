@@ -1,4 +1,5 @@
 import {
+  aws_apigateway as apigateway,
   aws_iam as iam,
   aws_s3 as s3,
   CfnOutput,
@@ -12,20 +13,26 @@ import { Service } from '../constructs/Service';
 export type GliderStackProps = StackProps;
 
 export class GliderStack extends Stack {
+  public readonly service: Service;
+  public readonly api: apigateway.RestApi;
+  public readonly pluginBucket: s3.Bucket;
+
   constructor(scope: Construct, id: string, props: GliderStackProps) {
     super(scope, id, props);
 
-    const pluginBucket = new s3.Bucket(this, 'Plugins', {
+    this.pluginBucket = new s3.Bucket(this, 'Plugins', {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
     });
 
-    const service = new Service(this, 'Glider', {
+    this.service = new Service(this, 'Glider', {
       plugins: {
-        bucket: pluginBucket,
+        bucket: this.pluginBucket,
       },
     });
+
+    this.api = this.service.api;
 
     const user = new iam.User(this, 'ApiUser');
     user.attachInlinePolicy(
@@ -35,7 +42,7 @@ export class GliderStack extends Stack {
             actions: ['execute-api:Invoke'],
             effect: iam.Effect.ALLOW,
             resources: [
-              `arn:aws:execute-api:${this.region}:${this.account}:${service.api.restApiId}/*`,
+              `arn:aws:execute-api:${this.region}:${this.account}:${this.service.api.restApiId}/*`,
             ],
           }),
         ],
@@ -43,14 +50,14 @@ export class GliderStack extends Stack {
     );
 
     // Allow the API user to read from the plugin bucket, for simplicity in dev
-    pluginBucket.grantRead(user);
+    this.pluginBucket.grantRead(user);
 
     const accessKey = new iam.AccessKey(this, 'ApiUserAccessKey', {
       user,
     });
 
     new CfnOutput(this, 'ApiEndpoint', {
-      value: service.api.url,
+      value: this.service.api.url,
     });
     new CfnOutput(this, 'ApiAccessKey', {
       value: accessKey.accessKeyId,
@@ -59,7 +66,7 @@ export class GliderStack extends Stack {
       value: accessKey.secretAccessKey.unsafeUnwrap(),
     });
     new CfnOutput(this, 'PluginBucketName', {
-      value: pluginBucket.bucketName,
+      value: this.pluginBucket.bucketName,
     });
   }
 }
