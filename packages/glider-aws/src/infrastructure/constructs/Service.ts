@@ -175,7 +175,7 @@ export class Service extends Construct {
     const fn = new nodejs.NodejsFunction(this, `${method}${pathId}Lambda`, {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: pathJoin(__dirname, `../src/controllers/${entry}.js`),
+      entry: pathJoin(__dirname, `../../controllers/${entry}.js`),
       handler,
       environment,
     });
