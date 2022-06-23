@@ -14,6 +14,8 @@ import { Construct } from 'constructs';
 
 import { Worker } from './Worker';
 
+import { resolveScript } from '../utils';
+
 interface ServiceProps {
   dynamoDb?: {
     billingMode?: dynamodb.BillingMode;
@@ -175,7 +177,7 @@ export class Service extends Construct {
     const fn = new nodejs.NodejsFunction(this, `${method}${pathId}Lambda`, {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: pathJoin(__dirname, `../../controllers/${entry}.js`),
+      entry: resolveScript(pathJoin(__dirname, `../../controllers/${entry}`)),
       handler,
       environment,
     });

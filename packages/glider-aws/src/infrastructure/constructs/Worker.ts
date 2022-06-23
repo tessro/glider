@@ -14,6 +14,8 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
+import { resolveScript } from '../utils';
+
 interface WorkerProps {
   logging?: ecs.LogDriver;
   plugins?: {
@@ -46,28 +48,28 @@ export class Worker extends Construct {
     const beforeSyncFn = new nodejs.NodejsFunction(this, 'BeforeSyncFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: pathJoin(__dirname, '../../state-machine/index.js'),
+      entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
       handler: 'beforeSync',
     });
 
     const afterSyncFn = new nodejs.NodejsFunction(this, 'AfterSyncFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: pathJoin(__dirname, '../../state-machine/index.js'),
+      entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
       handler: 'afterSync',
     });
 
     const afterSleepFn = new nodejs.NodejsFunction(this, 'AfterSleepFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: pathJoin(__dirname, '../../state-machine/index.js'),
+      entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
       handler: 'afterSleep',
     });
 
     const invokeSelfFn = new nodejs.NodejsFunction(this, 'InvokeSelfFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
-      entry: pathJoin(__dirname, '../../state-machine/index.js'),
+      entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
       handler: 'invokeSelf',
     });
 
