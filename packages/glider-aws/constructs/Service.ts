@@ -5,6 +5,7 @@ import {
   aws_apigateway as apigateway,
   aws_dynamodb as dynamodb,
   aws_ecs as ecs,
+  aws_iam as iam,
   aws_lambda as lambda,
   aws_lambda_nodejs as nodejs,
   aws_s3 as s3,
@@ -204,5 +205,17 @@ export class Service extends Construct {
       case undefined:
       // noop
     }
+  }
+
+  public grantApiAccess(grantee: iam.IPrincipal) {
+    const { region, account } = this.api.env;
+
+    return iam.Grant.addToPrincipal({
+      grantee,
+      actions: ['execute-api:Invoke'],
+      resourceArns: [
+        `arn:aws:execute-api:${region}:${account}:${this.api.restApiId}/*`,
+      ],
+    });
   }
 }

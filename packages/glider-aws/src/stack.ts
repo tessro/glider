@@ -35,19 +35,7 @@ export class GliderStack extends Stack {
     this.api = this.service.api;
 
     const user = new iam.User(this, 'ApiUser');
-    user.attachInlinePolicy(
-      new iam.Policy(this, 'AllowApiAccess', {
-        statements: [
-          new iam.PolicyStatement({
-            actions: ['execute-api:Invoke'],
-            effect: iam.Effect.ALLOW,
-            resources: [
-              `arn:aws:execute-api:${this.region}:${this.account}:${this.service.api.restApiId}/*`,
-            ],
-          }),
-        ],
-      })
-    );
+    this.service.grantApiAccess(user);
 
     // Allow the API user to read from the plugin bucket, for simplicity in dev
     this.pluginBucket.grantRead(user);
