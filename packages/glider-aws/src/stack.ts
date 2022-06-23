@@ -8,7 +8,7 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
-import { Service } from '../constructs/Service';
+import { Service } from './constructs/Service';
 
 export type GliderStackProps = StackProps;
 

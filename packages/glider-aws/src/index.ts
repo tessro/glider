@@ -1,2 +1,2 @@
 export * from './stack';
-export * from '../constructs/Service';
+export * from './constructs/Service';
