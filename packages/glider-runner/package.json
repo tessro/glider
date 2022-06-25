@@ -23,6 +23,7 @@
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "docker:build": "docker build -t glider-runner -f ./Dockerfile ../..",
+    "docker:publish": "docker build --platform linux/arm64 -t balsahq/glider-runner -f ./Dockerfile ../.. && docker push balsahq/glider-runner",
     "start": "docker run --rm -e PLUGINS_BUCKET_NAME=paul-glider-corestack-pluginsc0905b5f-1xj0xwlkvnmud glider-runner"
   },
   "dependencies": {
