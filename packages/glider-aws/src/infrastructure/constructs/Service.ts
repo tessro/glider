@@ -4,6 +4,7 @@ import {
   Stack,
   aws_apigateway as apigateway,
   aws_dynamodb as dynamodb,
+  aws_ec2 as ec2,
   aws_ecs as ecs,
   aws_iam as iam,
   aws_lambda as lambda,
@@ -25,6 +26,7 @@ interface ServiceProps {
   };
   worker?: {
     logging?: ecs.LogDriver;
+    vpc?: ec2.IVpc;
   };
 }
 
@@ -62,6 +64,7 @@ export class Service extends Construct {
       table: this.table,
       plugins: props.plugins,
       logging: props.worker?.logging,
+      vpc: props.worker?.vpc,
     });
 
     // The management API

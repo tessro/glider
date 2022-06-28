@@ -3,6 +3,7 @@ import { join as pathJoin } from 'path';
 import {
   Duration,
   aws_dynamodb as dynamodb,
+  aws_ec2 as ec2,
   aws_ecs as ecs,
   aws_iam as iam,
   aws_lambda as lambda,
@@ -24,6 +25,7 @@ interface WorkerProps {
   runnerImage?: string;
   table: dynamodb.ITable;
   timeout?: Duration;
+  vpc?: ec2.IVpc;
 }
 
 const defaultProps: Partial<WorkerProps> = {
@@ -93,6 +95,7 @@ export class Worker extends Construct {
     });
 
     const cluster = new ecs.Cluster(this, 'Cluster', {
+      vpc: this.props.vpc,
       containerInsights: true,
     });
 
