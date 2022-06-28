@@ -1,5 +1,11 @@
 # @balsahq/glider-aws
 
+## 0.2.3
+
+### Patch Changes
+
+- e91128b: Make `Service` construct-scoped
+
 ## 0.2.2
 
 ### Patch Changes
