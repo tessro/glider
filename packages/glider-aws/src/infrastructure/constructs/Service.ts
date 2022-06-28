@@ -20,6 +20,7 @@ import { resolveScript } from '../utils';
 interface ServiceProps {
   dynamoDb?: {
     billingMode?: dynamodb.BillingMode;
+    pointInTimeRecovery?: boolean;
   };
   plugins?: {
     bucket: s3.IBucket;
@@ -48,6 +49,7 @@ export class Service extends Construct {
     this.table = new dynamodb.Table(this, 'Table', {
       billingMode:
         props.dynamoDb?.billingMode ?? dynamodb.BillingMode.PAY_PER_REQUEST,
+      pointInTimeRecovery: props.dynamoDb?.pointInTimeRecovery ?? true,
       timeToLiveAttribute: 'ttl',
       partitionKey: {
         name: 'pk',
