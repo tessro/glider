@@ -13,9 +13,9 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
-import { Worker } from './Worker';
-
 import { resolveScript } from '../utils';
+
+import { Worker } from './Worker';
 
 interface ServiceProps {
   dynamoDb?: {
