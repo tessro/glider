@@ -1,5 +1,11 @@
 # @balsahq/glider-aws
 
+## 0.2.4
+
+### Patch Changes
+
+- Include updated distributables
+
 ## 0.2.3
 
 ### Patch Changes
