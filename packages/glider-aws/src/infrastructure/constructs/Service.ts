@@ -1,7 +1,6 @@
 import { join as pathJoin } from 'path';
 
 import {
-  Stack,
   aws_apigateway as apigateway,
   aws_dynamodb as dynamodb,
   aws_ec2 as ec2,
@@ -43,7 +42,7 @@ export class Service extends Construct {
   public readonly table: dynamodb.Table;
   public readonly worker: Worker;
 
-  constructor(scope: Stack, id: string, props: ServiceProps = {}) {
+  constructor(scope: Construct, id: string, props: ServiceProps = {}) {
     super(scope, id);
 
     this.table = new dynamodb.Table(this, 'Table', {
