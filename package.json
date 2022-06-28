@@ -7,7 +7,7 @@
     "aws:diff": "npm run -w @balsahq/glider-aws diff",
     "aws:remove": "npm run -w @balsahq/glider-aws remove",
     "aws:start": "npm run -w @balsahq/glider-aws start",
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json && npm run aws:build",
     "build:watch": "npm run build -- --watch",
     "check-all": "npm run lint && npm run typecheck && npm run test",
     "clean": "npm run --workspaces --if-present clean",

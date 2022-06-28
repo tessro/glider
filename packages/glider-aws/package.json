@@ -21,11 +21,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "cdk synth",
+    "build": "tsc",
     "deploy": "cdk deploy",
     "diff": "cdk diff",
     "remove": "cdk remove",
     "start": "sam local start-api -t cdk.out/GliderStack.template.json",
+    "synth": "cdk synth",
     "test": "jest"
   },
   "dependencies": {
