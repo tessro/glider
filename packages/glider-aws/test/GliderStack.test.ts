@@ -1,7 +1,7 @@
 import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 
-import { GliderStack } from '../src/stack';
+import { GliderStack } from '../src/infrastructure/stack';
 
 test('Core Stack', () => {
   const app = new App();
