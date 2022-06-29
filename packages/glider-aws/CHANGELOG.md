@@ -1,5 +1,11 @@
 # @balsahq/glider-aws
 
+## 0.2.8
+
+### Patch Changes
+
+- d0b1e1d: Expose `ServiceProps` type
+
 ## 0.2.7
 
 ### Patch Changes
