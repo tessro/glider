@@ -36,6 +36,7 @@ const defaultProps: Partial<WorkerProps> = {
 export class Worker extends Construct {
   public readonly stateMachine: sfn.StateMachine;
   public readonly taskDefinition: ecs.TaskDefinition;
+  public readonly cluster: ecs.Cluster;
 
   private readonly props: WorkerProps;
 
@@ -94,7 +95,7 @@ export class Worker extends Construct {
       time: sfn.WaitTime.timestampPath('$.state.Payload.waitUntil'),
     });
 
-    const cluster = new ecs.Cluster(this, 'Cluster', {
+    this.cluster = new ecs.Cluster(this, 'Cluster', {
       vpc: this.props.vpc,
       containerInsights: true,
     });
@@ -127,7 +128,7 @@ export class Worker extends Construct {
     });
 
     const syncTask = new tasks.EcsRunTask(this, 'Sync', {
-      cluster,
+      cluster: this.cluster,
       integrationPattern: sfn.IntegrationPattern.RUN_JOB,
       launchTarget: new tasks.EcsFargateLaunchTarget(),
       taskDefinition: this.taskDefinition,
