@@ -1,5 +1,11 @@
 # @balsahq/glider-aws
 
+## 0.2.7
+
+### Patch Changes
+
+- 4330eff: Allow secrets to be passed to job runners
+
 ## 0.2.6
 
 ### Patch Changes
