@@ -1,5 +1,15 @@
 # @balsahq/glider-runner
 
+## 0.2.6
+
+### Patch Changes
+
+- dfaf722: Nest all worker configuration under `worker` prop
+- 7dff87d: Allow variables to be added to the runner environment
+- Updated dependencies [dfaf722]
+- Updated dependencies [7dff87d]
+  - @balsahq/glider-connectors@0.2.6
+
 ## 0.2.5
 
 ### Patch Changes
