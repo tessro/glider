@@ -3,31 +3,22 @@ import { join as pathJoin } from 'path';
 import {
   aws_apigateway as apigateway,
   aws_dynamodb as dynamodb,
-  aws_ec2 as ec2,
-  aws_ecs as ecs,
   aws_iam as iam,
   aws_lambda as lambda,
   aws_lambda_nodejs as nodejs,
-  aws_s3 as s3,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 import { resolveScript } from '../utils';
 
-import { Worker } from './Worker';
+import { Worker, WorkerProps } from './Worker';
 
 interface ServiceProps {
   dynamoDb?: {
     billingMode?: dynamodb.BillingMode;
     pointInTimeRecovery?: boolean;
   };
-  plugins?: {
-    bucket: s3.IBucket;
-  };
-  worker?: {
-    logging?: ecs.LogDriver;
-    vpc?: ec2.IVpc;
-  };
+  worker?: Omit<WorkerProps, 'table'>;
 }
 
 interface AddRouteOptions {
@@ -62,10 +53,8 @@ export class Service extends Construct {
 
     // TODO(ptr): state machine should talk to API
     this.worker = new Worker(this, 'Worker', {
+      ...props.worker,
       table: this.table,
-      plugins: props.plugins,
-      logging: props.worker?.logging,
-      vpc: props.worker?.vpc,
     });
 
     // The management API

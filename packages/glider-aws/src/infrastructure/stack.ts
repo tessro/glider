@@ -27,8 +27,10 @@ export class GliderStack extends Stack {
     });
 
     this.service = new Service(this, 'Glider', {
-      plugins: {
-        bucket: this.pluginBucket,
+      worker: {
+        plugins: {
+          bucket: this.pluginBucket,
+        },
       },
     });
 

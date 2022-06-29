@@ -24,7 +24,7 @@ interface RunnerProps {
   readonly image?: string;
 }
 
-interface WorkerProps {
+export interface WorkerProps {
   logging?: ecs.LogDriver;
   plugins?: {
     bucket: s3.IBucket;
