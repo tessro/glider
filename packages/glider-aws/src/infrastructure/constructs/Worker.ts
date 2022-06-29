@@ -21,6 +21,9 @@ interface RunnerProps {
   readonly environment?: {
     [key: string]: string;
   };
+  readonly secrets?: {
+    [key: string]: ecs.Secret;
+  };
   readonly image?: string;
 }
 
@@ -132,6 +135,7 @@ export class Worker extends Construct {
         ...props.runner?.environment,
         PLUGINS_BUCKET_NAME: this.props.plugins?.bucket.bucketName ?? '',
       },
+      secrets: props.runner?.secrets,
       logging: props.logging,
     });
 
