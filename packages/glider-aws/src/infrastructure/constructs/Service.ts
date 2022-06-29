@@ -13,7 +13,7 @@ import { resolveScript } from '../utils';
 
 import { Worker, WorkerProps } from './Worker';
 
-interface ServiceProps {
+export interface ServiceProps {
   dynamoDb?: {
     billingMode?: dynamodb.BillingMode;
     pointInTimeRecovery?: boolean;
