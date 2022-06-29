@@ -17,12 +17,19 @@ import { Construct } from 'constructs';
 
 import { resolveScript } from '../utils';
 
+interface RunnerProps {
+  readonly environment?: {
+    [key: string]: string;
+  };
+  readonly image?: string;
+}
+
 interface WorkerProps {
   logging?: ecs.LogDriver;
   plugins?: {
     bucket: s3.IBucket;
   };
-  runnerImage?: string;
+  runner?: RunnerProps;
   table: dynamodb.ITable;
   timeout?: Duration;
   vpc?: ec2.IVpc;
@@ -112,7 +119,7 @@ export class Worker extends Construct {
       }
     );
 
-    const imageName = props.runnerImage ?? 'balsahq/glider-runner';
+    const imageName = props.runner?.image ?? 'balsahq/glider-runner';
     const containerDefinition = this.taskDefinition.addContainer('Worker', {
       image: ecs.ContainerImage.fromRegistry(imageName, {
         credentials: secretsmanager.Secret.fromSecretNameV2(
@@ -122,6 +129,7 @@ export class Worker extends Construct {
         ),
       }),
       environment: {
+        ...props.runner?.environment,
         PLUGINS_BUCKET_NAME: this.props.plugins?.bucket.bucketName ?? '',
       },
       logging: props.logging,
