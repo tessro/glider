@@ -1,5 +1,11 @@
 # @balsahq/glider-aws
 
+## 0.2.9
+
+### Patch Changes
+
+- 0400af4: Expose access to AWS Lambdas created by Glider
+
 ## 0.2.8
 
 ### Patch Changes
