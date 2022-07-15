@@ -1,5 +1,12 @@
 # @balsahq/glider-aws
 
+## 0.2.10
+
+### Patch Changes
+
+- Expose Worker lambdas using named keys instead of an array
+- Expose API route lambdas using objects that also include the HTTP method and path
+
 ## 0.2.9
 
 ### Patch Changes
