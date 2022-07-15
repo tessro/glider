@@ -43,18 +43,18 @@ const defaultProps: Partial<WorkerProps> = {
   timeout: Duration.hours(24),
 };
 
+interface Lambdas {
+  beforeSync: lambda.Function;
+  afterSync: lambda.Function;
+  afterSleep: lambda.Function;
+  invokeSelf: lambda.Function;
+}
+
 export class Worker extends Construct {
   public readonly stateMachine: sfn.StateMachine;
   public readonly taskDefinition: ecs.TaskDefinition;
   public readonly cluster: ecs.Cluster;
-
-  /**
-   * Array of all Lambdas created by the Worker Step Function. This is intended
-   * to be used by callers for things like adding CloudWatch Alarms. Note: the
-   * `lambdas` property of `Service` includes these. If you're already using
-   * that, you probably don't need to iterate this list too.
-   */
-  public readonly lambdas: lambda.Function[];
+  public readonly lambdas: Lambdas;
 
   private readonly props: WorkerProps;
 
@@ -94,8 +94,12 @@ export class Worker extends Construct {
       handler: 'invokeSelf',
     });
 
-    // Expose all Lambdas via the public property
-    this.lambdas = [beforeSyncFn, afterSyncFn, afterSleepFn, invokeSelfFn];
+    this.lambdas = {
+      beforeSync: beforeSyncFn,
+      afterSync: afterSyncFn,
+      afterSleep: afterSleepFn,
+      invokeSelf: invokeSelfFn,
+    };
 
     const beforeSync = new tasks.LambdaInvoke(this, 'Before sync', {
       lambdaFunction: beforeSyncFn,
