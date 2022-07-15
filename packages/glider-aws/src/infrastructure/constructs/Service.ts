@@ -33,6 +33,12 @@ export class Service extends Construct {
   public readonly table: dynamodb.Table;
   public readonly worker: Worker;
 
+  /**
+   * Array of all Lambdas created by Glider. This is intended to be used by
+   * callers for things like adding CloudWatch Alarms.
+   */
+  public readonly lambdas: lambda.Function[] = [];
+
   constructor(scope: Construct, id: string, props: ServiceProps = {}) {
     super(scope, id);
 
@@ -56,6 +62,9 @@ export class Service extends Construct {
       ...props.worker,
       table: this.table,
     });
+
+    // Add Worker lambdas to the Service lambda list
+    this.lambdas.push(...this.worker.lambdas);
 
     // The management API
     this.api = new apigateway.RestApi(this, 'Api');
@@ -174,6 +183,9 @@ export class Service extends Construct {
       handler,
       environment,
     });
+
+    // Add this Lambda to the publicly accessible list of Lambdas
+    this.lambdas.push(fn);
 
     resource.addMethod(method, new apigateway.LambdaIntegration(fn), {
       authorizationType: apigateway.AuthorizationType.IAM,

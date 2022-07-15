@@ -48,6 +48,14 @@ export class Worker extends Construct {
   public readonly taskDefinition: ecs.TaskDefinition;
   public readonly cluster: ecs.Cluster;
 
+  /**
+   * Array of all Lambdas created by the Worker Step Function. This is intended
+   * to be used by callers for things like adding CloudWatch Alarms. Note: the
+   * `lambdas` property of `Service` includes these. If you're already using
+   * that, you probably don't need to iterate this list too.
+   */
+  public readonly lambdas: lambda.Function[];
+
   private readonly props: WorkerProps;
 
   constructor(scope: Construct, id: string, props: WorkerProps) {
@@ -85,6 +93,9 @@ export class Worker extends Construct {
       entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
       handler: 'invokeSelf',
     });
+
+    // Expose all Lambdas via the public property
+    this.lambdas = [beforeSyncFn, afterSyncFn, afterSleepFn, invokeSelfFn];
 
     const beforeSync = new tasks.LambdaInvoke(this, 'Before sync', {
       lambdaFunction: beforeSyncFn,
