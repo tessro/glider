@@ -108,7 +108,7 @@ export class Job {
   async readStream(
     stream: Stream,
     context: unknown,
-    callback: (records: unknown[]) => void
+    callback: (records: unknown[]) => Promise<void>
   ): Promise<void> {
     if (stream.parent) {
       await this.readStream(stream.parent, {}, async (records: unknown[]) => {
@@ -124,7 +124,7 @@ export class Job {
   async readStreamInternal(
     stream: Stream,
     context: unknown,
-    callback: (records: unknown[]) => void
+    callback: (records: unknown[]) => Promise<void>
   ): Promise<void> {
     const headers = await this.getHeaders();
     const transform = stream.transform ?? defaultTransform;
