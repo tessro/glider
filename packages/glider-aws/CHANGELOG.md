@@ -1,5 +1,11 @@
 # @balsahq/glider-aws
 
+## 0.3.0
+
+### Minor Changes
+
+- 58f9ab1: Introduced context object to `Destination.write` method signature, and moved Job ID from first positional argument to `jobId` property of the context (breaking change!)
+
 ## 0.2.10
 
 ### Patch Changes
