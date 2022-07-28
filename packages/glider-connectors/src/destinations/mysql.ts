@@ -1,4 +1,4 @@
-import { Destination } from '@balsahq/glider';
+import { Destination, DestinationContext } from '@balsahq/glider';
 import {
   createConnection as createMysqlConnection,
   Connection,
@@ -37,11 +37,11 @@ export class MysqlDestination implements Destination {
   }
 
   async write(
-    jobId: string,
     source: string,
     stream: string,
     records: unknown[],
-    retrievedAt: number
+    retrievedAt: number,
+    { jobId }: DestinationContext
   ): Promise<void> {
     const tableName = getTableName(source, stream);
     await this.ensureTable(tableName);

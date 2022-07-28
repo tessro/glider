@@ -41,6 +41,12 @@ declare module '@balsahq/glider' {
     streams: Stream[];
   }
 
+  export interface DestinationContext {
+    jobId: string;
+    sourceOptions: any;
+    destinationOptions: any;
+  }
+
   export interface Destination {
     name: string;
 
@@ -48,11 +54,11 @@ declare module '@balsahq/glider' {
     close?(): Promise<void>;
 
     write(
-      jobId: string,
       source: string,
       stream: string,
       records: unknown[],
-      retrievedAt: number
+      retrievedAt: number,
+      context: DestinationContext
     ): void | Promise<void>;
   }
 

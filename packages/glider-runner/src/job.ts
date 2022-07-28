@@ -1,6 +1,7 @@
 import {
   Context as ConnectorContext,
   Destination,
+  DestinationContext,
   Source,
   Stream,
   CredentialsProvider,
@@ -16,7 +17,9 @@ interface JobOptions {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   credentials: Record<string, any>;
   source: Source;
+  sourceOptions: unknown;
   destination: Destination;
+  destinationOptions: unknown;
   logger?: Logger;
 }
 
@@ -52,6 +55,7 @@ export class Job {
 
   private readonly source: Source;
   private readonly destination: Destination;
+  private readonly destinationContext: DestinationContext;
 
   private readonly credentials: Record<string, CredentialsProvider>;
   private readonly logger: Logger;
@@ -60,6 +64,11 @@ export class Job {
     this.id = options.id;
     this.source = options.source;
     this.destination = options.destination;
+    this.destinationContext = {
+      jobId: this.id,
+      sourceOptions: options.sourceOptions,
+      destinationOptions: options.destinationOptions,
+    };
     this.credentials = options.credentials;
     this.logger = options.logger ?? pino();
   }
@@ -92,11 +101,11 @@ export class Job {
     return this.readStream(stream, {}, async (records) => {
       const now = Date.now();
       await this.destination.write(
-        this.id,
         this.source.name,
         stream.name,
         records,
-        now
+        now,
+        this.destinationContext
       );
     });
   }

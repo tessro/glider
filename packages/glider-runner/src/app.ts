@@ -124,7 +124,9 @@ async function main() {
       [args.destination]: destinationProvider,
     },
     source: new source(args.sourceOptions),
+    sourceOptions: args.sourceOptions,
     destination: new destination(args.destinationOptions),
+    destinationOptions: args.destinationOptions,
   });
 
   await job.run();

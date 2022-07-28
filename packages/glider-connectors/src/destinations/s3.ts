@@ -28,7 +28,6 @@ export class S3Destination implements Destination {
   }
 
   async write(
-    jobId: string,
     source: string,
     stream: string,
     records: unknown[],

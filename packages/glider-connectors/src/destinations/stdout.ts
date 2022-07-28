@@ -1,4 +1,4 @@
-import type { Destination } from '@balsahq/glider';
+import type { Destination, DestinationContext } from '@balsahq/glider';
 import { pino } from 'pino';
 
 export class StdoutDestination implements Destination {
@@ -10,14 +10,15 @@ export class StdoutDestination implements Destination {
   });
 
   write(
-    jobId: string,
     source: string,
     stream: string,
-    records: unknown[]
+    records: unknown[],
+    _: number, // retrievedAt
+    context: DestinationContext
   ): void {
     for (const record of records) {
       this.logger.info({
-        job: jobId,
+        job: context.jobId,
         source,
         stream,
         record,
