@@ -119,7 +119,6 @@ async function main() {
 
   const job = new Job({
     id: uuidv4(),
-    context,
     credentials: {
       [args.source]: sourceProvider,
       [args.destination]: destinationProvider,

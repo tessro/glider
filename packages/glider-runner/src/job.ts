@@ -9,12 +9,10 @@ import { Response } from '@balsahq/glider-connectors';
 import got from 'got';
 import { pino, Logger } from 'pino';
 
-import { Context } from './context.js';
 import { sleep } from './utils.js';
 
 interface JobOptions {
   id: string;
-  context: Context;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   credentials: Record<string, any>;
   source: Source;
@@ -55,7 +53,6 @@ export class Job {
   private readonly source: Source;
   private readonly destination: Destination;
 
-  private readonly context: Context;
   private readonly credentials: Record<string, CredentialsProvider>;
   private readonly logger: Logger;
 
@@ -63,7 +60,6 @@ export class Job {
     this.id = options.id;
     this.source = options.source;
     this.destination = options.destination;
-    this.context = options.context;
     this.credentials = options.credentials;
     this.logger = options.logger ?? pino();
   }
