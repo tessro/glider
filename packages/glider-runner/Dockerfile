@@ -32,6 +32,6 @@ COPY packages/glider packages/glider
 COPY packages/glider-connectors packages/glider-connectors
 COPY packages/glider-runner packages/glider-runner
 
-RUN npm run build
+RUN npm run -w @balsahq/glider-runner build
 
 ENTRYPOINT ["node", "packages/glider-runner/dist/app.js"]

@@ -21,6 +21,7 @@
   "exports": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc -b",
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "docker:build": "docker build -t glider-runner -f ./Dockerfile ../..",
     "docker:publish": "docker build --platform linux/arm64 -t balsahq/glider-runner -f ./Dockerfile ../.. && docker push balsahq/glider-runner",
