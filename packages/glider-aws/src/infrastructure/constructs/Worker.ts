@@ -72,6 +72,10 @@ export class Worker extends Construct {
     const beforeSyncFn = new nodejs.NodejsFunction(this, 'BeforeSyncFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
+      bundling: {
+        format: nodejs.OutputFormat.ESM,
+        mainFields: ['module', 'main'],
+      },
       entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
       handler: 'beforeSync',
     });
@@ -79,6 +83,10 @@ export class Worker extends Construct {
     const afterSyncFn = new nodejs.NodejsFunction(this, 'AfterSyncFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
+      bundling: {
+        format: nodejs.OutputFormat.ESM,
+        mainFields: ['module', 'main'],
+      },
       entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
       handler: 'afterSync',
     });
@@ -86,6 +94,10 @@ export class Worker extends Construct {
     const afterSleepFn = new nodejs.NodejsFunction(this, 'AfterSleepFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
+      bundling: {
+        format: nodejs.OutputFormat.ESM,
+        mainFields: ['module', 'main'],
+      },
       entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
       handler: 'afterSleep',
     });
@@ -93,6 +105,10 @@ export class Worker extends Construct {
     const invokeSelfFn = new nodejs.NodejsFunction(this, 'InvokeSelfFn', {
       architecture: lambda.Architecture.ARM_64,
       runtime: lambda.Runtime.NODEJS_16_X,
+      bundling: {
+        format: nodejs.OutputFormat.ESM,
+        mainFields: ['module', 'main'],
+      },
       entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
       handler: 'invokeSelf',
     });
