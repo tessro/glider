@@ -1,3 +1,3 @@
-export * from './infrastructure/stack';
-export * from './infrastructure/constructs/Service';
-export { Worker } from './infrastructure/constructs/Worker';
+export * from './infrastructure/stack.js';
+export * from './infrastructure/constructs/Service.js';
+export { Worker } from './infrastructure/constructs/Worker.js';

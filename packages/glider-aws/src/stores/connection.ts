@@ -2,7 +2,7 @@ import type { DynamoDB } from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 
-import { assertIsAWSError } from '../utils';
+import { assertIsAWSError } from '../utils.js';
 
 const inputSchema = z.object({
   sourceId: z.string(),

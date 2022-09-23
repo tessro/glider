@@ -1,12 +1,12 @@
 import type { DynamoDB } from 'aws-sdk';
 
-import { ConnectionStore } from './connection';
-import { DestinationStore } from './destination';
-import { SourceStore } from './source';
+import { ConnectionStore } from './stores/connection.js';
+import { DestinationStore } from './stores/destination.js';
+import { SourceStore } from './stores/source.js';
 
-export * from './source';
-export * from './destination';
-export * from './connection';
+export * from './stores/source.js';
+export * from './stores/destination.js';
+export * from './stores/connection.js';
 
 interface Stores {
   sources: SourceStore;

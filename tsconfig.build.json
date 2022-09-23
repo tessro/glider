@@ -1,6 +1,7 @@
 {
   "files": [],
   "references": [
+    { "path": "packages/glider-aws" },
     { "path": "packages/glider-connectors" },
     { "path": "packages/glider-runner" }
   ]

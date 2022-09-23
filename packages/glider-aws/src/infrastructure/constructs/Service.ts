@@ -1,4 +1,5 @@
-import { join as pathJoin } from 'path';
+import { join as pathJoin } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import {
   aws_apigateway as apigateway,
@@ -9,9 +10,11 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
-import { resolveScript } from '../utils';
+import { resolveScript } from '../utils.js';
 
-import { Worker, WorkerProps } from './Worker';
+import { Worker, WorkerProps } from './Worker.js';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export interface ServiceProps {
   dynamoDb?: {

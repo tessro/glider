@@ -1,11 +1,11 @@
 import { DynamoDB, StepFunctions } from 'aws-sdk';
 import { parseExpression } from 'cron-parser';
-import pino from 'pino';
+import { pino } from 'pino';
 import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda';
 
-import { makeStores } from '../stores';
+import { makeStores } from '../stores.js';
 
-import type { LambdaContext } from './LambdaContext';
+import type { LambdaContext } from './LambdaContext.js';
 
 const withRequest = lambdaRequestTracker();
 const destination = pinoLambdaDestination();

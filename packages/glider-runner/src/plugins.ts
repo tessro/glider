@@ -181,7 +181,7 @@ async function fetchPluginsFromS3(bucketName: string): Promise<void> {
     // to avoid.
     const basename = path.basename(key, '.zip');
     const pluginDirectory = path.join(PLUGIN_DIRECTORY, basename);
-    const buffer = await streamToBuffer(result.Body);
+    const buffer = await streamToBuffer(result.Body as Readable);
 
     logger.info({
       msg: `Unpacking '${key}' into '${pluginDirectory}'`,

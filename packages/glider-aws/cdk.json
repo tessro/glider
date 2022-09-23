@@ -1,4 +1,4 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/glider.ts",
+  "app": "npx ts-node --esm bin/glider.ts",
   "context": {}
 }

@@ -20,8 +20,7 @@
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "rm -rf dist tsconfig.tsbuildinfo",
-    "test": "jest"
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.171.0",

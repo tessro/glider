@@ -1,11 +1,11 @@
 import { APIGatewayProxyHandler as Handler } from 'aws-lambda';
 import { DynamoDB } from 'aws-sdk';
-import pino from 'pino';
+import { pino } from 'pino';
 import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda';
 
-import { make400, make404 } from '../lambda';
-import { SourceStore } from '../stores';
-import { assertIsAWSError } from '../utils';
+import { make400, make404 } from '../lambda.js';
+import { SourceStore } from '../stores.js';
+import { assertIsAWSError } from '../utils.js';
 
 const withRequest = lambdaRequestTracker();
 const destination = pinoLambdaDestination();

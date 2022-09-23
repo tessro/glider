@@ -1,7 +1,11 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { Destination } from '@balsahq/glider';
-import { default as dateFormat } from 'dateformat';
+import DateFormat from 'dateformat';
 import { v4 as uuidv4 } from 'uuid';
+
+// Work around a bug in `@types/dateformat`.
+// See: https://github.com/microsoft/TypeScript/issues/50690
+const dateFormat = DateFormat.default;
 
 interface S3DestinationOptions {
   bucketName: string;

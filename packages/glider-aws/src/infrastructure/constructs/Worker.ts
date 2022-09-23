@@ -1,4 +1,5 @@
-import { join as pathJoin } from 'path';
+import { join as pathJoin } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import {
   Duration,
@@ -15,7 +16,9 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
-import { resolveScript } from '../utils';
+import { resolveScript } from '../utils.js';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 interface RunnerProps {
   readonly environment?: {

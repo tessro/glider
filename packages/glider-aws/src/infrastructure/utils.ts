@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync } from 'node:fs';
 
 /**
  * Resolves the full path to the provided script, adding `.js` or `.ts`.

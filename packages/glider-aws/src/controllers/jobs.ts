@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandler as Handler } from 'aws-lambda';
-import pino from 'pino';
+import { pino } from 'pino';
 import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda';
 
 const withRequest = lambdaRequestTracker();
