@@ -28,13 +28,13 @@
     "start": "docker run --rm -e PLUGINS_BUCKET_NAME=paul-glider-corestack-pluginsc0905b5f-1xj0xwlkvnmud glider-runner"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.113.0",
+    "@aws-sdk/client-s3": "3.171.0",
     "@balsahq/glider-connectors": "0.3.0",
-    "got": "12.1.0",
+    "got": "12.5.0",
     "mkdirp": "1.0.4",
     "mysql2": "2.3.3",
-    "pino": "8.0.0",
-    "uuid": "8.3.2",
+    "pino": "8.6.0",
+    "uuid": "9.0.0",
     "yargs": "17.5.1",
     "yauzl": "2.10.0"
   },
@@ -43,6 +43,6 @@
     "@types/mkdirp": "1.0.2",
     "@types/uuid": "8.3.4",
     "@types/yauzl": "2.10.0",
-    "pino-pretty": "8.0.0"
+    "pino-pretty": "9.1.0"
   }
 }

@@ -30,22 +30,22 @@
     "test": "jest"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.113.0",
-    "cron-parser": "^4.4.0",
-    "pino": "^8.0.0",
-    "pino-lambda": "^4.0.0",
-    "uuid": "^8.3.2",
-    "zod": "^3.17.3"
+    "@aws-sdk/client-s3": "3.171.0",
+    "cron-parser": "4.6.0",
+    "pino": "8.6.0",
+    "pino-lambda": "4.1.0",
+    "uuid": "9.0.0",
+    "zod": "3.19.1"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.28.1"
+    "aws-cdk-lib": "2.43.1"
   },
   "devDependencies": {
-    "aws-cdk": "2.28.1",
-    "@types/aws-lambda": "8.10.100",
+    "@types/aws-lambda": "8.10.104",
     "@types/uuid": "8.3.4",
-    "aws-sdk": "2.1157.0",
-    "pino-pretty": "8.0.0"
+    "aws-cdk": "2.43.1",
+    "aws-sdk": "2.1222.0",
+    "pino-pretty": "9.1.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
