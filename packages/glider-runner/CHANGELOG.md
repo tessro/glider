@@ -1,5 +1,15 @@
 # @balsahq/glider-runner
 
+## 0.4.0
+
+### Patch Changes
+
+- ca82f1e: Use ESM everywhere
+- 0952f1b: Drop remaining use of AWS SDK v2
+- Updated dependencies [ca82f1e]
+- Updated dependencies [0952f1b]
+  - @balsahq/glider-connectors@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes

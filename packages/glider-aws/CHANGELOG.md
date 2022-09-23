@@ -1,5 +1,16 @@
 # @balsahq/glider-aws
 
+## 0.4.0
+
+### Minor Changes
+
+- cb0f702: Emit ESM for AWS Lambda
+
+### Patch Changes
+
+- ca82f1e: Use ESM everywhere
+- 0952f1b: Drop remaining use of AWS SDK v2
+
 ## 0.3.0
 
 ### Minor Changes
