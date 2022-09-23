@@ -1,11 +1,14 @@
+import {
+  DynamoDBClient,
+  ConditionalCheckFailedException,
+} from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyHandler as Handler } from 'aws-lambda';
-import { DynamoDB } from 'aws-sdk';
 import { pino } from 'pino';
 import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda';
 
 import { make400, make404 } from '../lambda.js';
 import { SourceStore } from '../stores.js';
-import { assertIsAWSError } from '../utils.js';
 
 const withRequest = lambdaRequestTracker();
 const destination = pinoLambdaDestination();
@@ -16,7 +19,9 @@ if (!process.env.DYNAMODB_TABLE_NAME) {
 }
 
 const store = new SourceStore({
-  client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
+  client: DynamoDBDocumentClient.from(
+    new DynamoDBClient({ apiVersion: '2012-11-05' })
+  ),
   tableName: process.env.DYNAMODB_TABLE_NAME,
 });
 
@@ -127,9 +132,7 @@ export const update: Handler = async (event, context) => {
       options: data.options,
     });
   } catch (err: unknown) {
-    assertIsAWSError(err);
-
-    if (err.code === 'ConditionalCheckFailedException') {
+    if (err instanceof ConditionalCheckFailedException) {
       logger.info({ err });
 
       return make404({

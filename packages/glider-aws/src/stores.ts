@@ -1,4 +1,4 @@
-import type { DynamoDB } from 'aws-sdk';
+import type { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 import { ConnectionStore } from './stores/connection.js';
 import { DestinationStore } from './stores/destination.js';
@@ -15,7 +15,7 @@ interface Stores {
 }
 
 interface Options {
-  client: DynamoDB.DocumentClient;
+  client: DynamoDBDocumentClient;
   tableName: string;
 }
 

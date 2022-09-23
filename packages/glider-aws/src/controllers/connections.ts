@@ -1,17 +1,21 @@
+import {
+  DynamoDBClient,
+  ConditionalCheckFailedException,
+} from '@aws-sdk/client-dynamodb';
+import { SFNClient, StartExecutionCommand } from '@aws-sdk/client-sfn';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyHandler as Handler } from 'aws-lambda';
-import { DynamoDB, StepFunctions } from 'aws-sdk';
 import { pino } from 'pino';
 import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda';
 
 import { make400, make404 } from '../lambda.js';
 import { ConnectionStore } from '../stores/connection.js';
-import { assertIsAWSError } from '../utils.js';
 
 const withRequest = lambdaRequestTracker();
 const destination = pinoLambdaDestination();
 const logger = pino({}, destination);
 
-const sfn = new StepFunctions({ apiVersion: '2016-11-23' });
+const sfn = new SFNClient({ apiVersion: '2016-11-23' });
 if (!process.env.WORKER_STATE_MACHINE_ARN) {
   throw new Error(
     `Missing required environment variable: $WORKER_STATE_MACHINE_ARN`
@@ -27,9 +31,36 @@ if (!process.env.DYNAMODB_TABLE_NAME) {
 const dynamoDbTableName = process.env.DYNAMODB_TABLE_NAME;
 
 const store = new ConnectionStore({
-  client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
+  client: DynamoDBDocumentClient.from(
+    new DynamoDBClient({ apiVersion: '2012-11-05' })
+  ),
   tableName: dynamoDbTableName,
 });
+
+async function invokeStateMachine(connectionId: string): Promise<string> {
+  const command = new StartExecutionCommand({
+    stateMachineArn,
+    input: JSON.stringify({
+      connectionId,
+      dynamoDbTableName,
+      restart: {
+        executionCount: 0,
+        stateMachineArn,
+      },
+    }),
+  });
+
+  // Invoke run of the state machine
+  const execution = await sfn.send(command);
+
+  if (!execution.executionArn) {
+    throw new Error(
+      `'StartExecution' did not return an execution ARN. Invocation may have failed.`
+    );
+  }
+
+  return execution.executionArn;
+}
 
 export const list: Handler = async (event, context) => {
   withRequest(event, context);
@@ -69,22 +100,8 @@ export const create: Handler = async (event, context) => {
     destinationId: data.destinationId,
   });
 
-  // Invoke first run of the state machine
-  const execution = await sfn
-    .startExecution({
-      stateMachineArn,
-      input: JSON.stringify({
-        connectionId: result.id,
-        dynamoDbTableName,
-        restart: {
-          executionCount: 0,
-          stateMachineArn,
-        },
-      }),
-    })
-    .promise();
-
-  await store.setExecutionArn(result.id, execution.executionArn);
+  const executionArn = await invokeStateMachine(result.id);
+  await store.setExecutionArn(result.id, executionArn);
 
   return {
     statusCode: 201,
@@ -154,9 +171,7 @@ export const update: Handler = async (event, context) => {
       schedule: data.schedule,
     });
   } catch (err: unknown) {
-    assertIsAWSError(err);
-
-    if (err.code === 'ConditionalCheckFailedException') {
+    if (err instanceof ConditionalCheckFailedException) {
       logger.info({ err });
 
       return make404({
@@ -259,29 +274,15 @@ export const run: Handler = async (event, context) => {
     });
   }
 
-  // Invoke run of the state machine
-  const execution = await sfn
-    .startExecution({
-      stateMachineArn,
-      input: JSON.stringify({
-        connectionId: connection.id,
-        dynamoDbTableName,
-        restart: {
-          executionCount: 0,
-          stateMachineArn,
-        },
-      }),
-    })
-    .promise();
-
-  await store.setExecutionArn(connection.id, execution.executionArn);
+  const executionArn = await invokeStateMachine(connection.id);
+  await store.setExecutionArn(connection.id, executionArn);
 
   return {
     statusCode: 201,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       success: true,
-      executionArn: execution.executionArn,
+      executionArn,
     }),
   };
 };

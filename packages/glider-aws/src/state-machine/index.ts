@@ -1,4 +1,6 @@
-import { DynamoDB, StepFunctions } from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { SFNClient, StartExecutionCommand } from '@aws-sdk/client-sfn';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { parseExpression } from 'cron-parser';
 import { pino } from 'pino';
 import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda';
@@ -60,7 +62,9 @@ export const beforeSync: Handler<BeforeSyncOutput> = async (event, context) => {
   withRequest(event, context);
 
   const db = makeStores({
-    client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
+    client: DynamoDBDocumentClient.from(
+      new DynamoDBClient({ apiVersion: '2012-11-05' })
+    ),
     tableName: event.dynamoDbTableName,
   });
 
@@ -115,7 +119,9 @@ export const afterSync: Handler<WaitCommand> = async (event, context) => {
   withRequest(event, context);
 
   const db = makeStores({
-    client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
+    client: DynamoDBDocumentClient.from(
+      new DynamoDBClient({ apiVersion: '2012-11-05' })
+    ),
     tableName: event.dynamoDbTableName,
   });
 
@@ -147,7 +153,9 @@ export const afterSleep: Handler<AfterSleepOutput> = async (event, context) => {
   withRequest(event, context);
 
   const db = makeStores({
-    client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
+    client: DynamoDBDocumentClient.from(
+      new DynamoDBClient({ apiVersion: '2012-11-05' })
+    ),
     tableName: event.dynamoDbTableName,
   });
 
@@ -188,27 +196,46 @@ export const invokeSelf: Handler = async (event, context) => {
   });
 
   const db = makeStores({
-    client: new DynamoDB.DocumentClient({ apiVersion: '2012-11-05' }),
+    client: DynamoDBDocumentClient.from(
+      new DynamoDBClient({ apiVersion: '2012-11-05' })
+    ),
     tableName: event.dynamoDbTableName,
   });
 
-  const sfn = new StepFunctions({
+  const sfn = new SFNClient({
     apiVersion: '2016-11-23',
   });
 
-  const execution = await sfn
-    .startExecution({
+  const command = new StartExecutionCommand({
+    stateMachineArn: event.restart.stateMachineArn,
+    input: JSON.stringify({
+      connectionId: event.connectionId,
+      dynamoDbTableName: event.dynamoDbTableName,
+      restart: {
+        executionCount: event.restart.executionCount + 1,
+        stateMachineArn: event.restart.stateMachineArn,
+      },
+    }),
+  });
+
+  // Invoke run of the state machine
+  const execution = await sfn.send(command);
+
+  if (!execution.executionArn) {
+    logger.error({
+      msg: `Invoked another execution for connection '${event.connectionId}', but got no execution ARN`,
+      connectionId: event.connectionId,
+      execution: {
+        arn: execution.executionArn,
+        startDate: execution.startDate,
+      },
       stateMachineArn: event.restart.stateMachineArn,
-      input: JSON.stringify({
-        connectionId: event.connectionId,
-        dynamoDbTableName: event.dynamoDbTableName,
-        restart: {
-          executionCount: event.restart.executionCount + 1,
-          stateMachineArn: event.restart.stateMachineArn,
-        },
-      }),
-    })
-    .promise();
+    });
+
+    throw new Error(
+      `'StartExecution' did not return an execution ARN. Invocation may have failed.`
+    );
+  }
 
   logger.info({
     msg: `Successfully invoked another execution for connection '${event.connectionId}'`,

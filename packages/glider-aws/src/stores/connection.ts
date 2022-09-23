@@ -1,8 +1,14 @@
-import type { DynamoDB } from 'aws-sdk';
+import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  UpdateCommand,
+  DeleteCommand,
+  ScanCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
-
-import { assertIsAWSError } from '../utils.js';
 
 const inputSchema = z.object({
   sourceId: z.string(),
@@ -40,7 +46,7 @@ export interface Connection {
 }
 
 interface Options {
-  client: DynamoDB.DocumentClient;
+  client: DynamoDBDocumentClient;
   tableName: string;
 }
 
@@ -71,7 +77,7 @@ function format(item: unknown): Connection {
 }
 
 export class ConnectionStore {
-  private client: DynamoDB.DocumentClient;
+  private client: DynamoDBDocumentClient;
   private tableName: string;
 
   constructor(private options: Options) {
@@ -80,12 +86,12 @@ export class ConnectionStore {
   }
 
   async get(id: string): Promise<Connection | null> {
-    const result = await this.client
-      .get({
+    const result = await this.client.send(
+      new GetCommand({
         TableName: this.tableName,
         Key: { pk: `connection#${id}`, sk: `metadata#${id}` },
       })
-      .promise();
+    );
 
     if (!result.Item) {
       return null;
@@ -95,8 +101,8 @@ export class ConnectionStore {
   }
 
   async getAll(): Promise<Connection[]> {
-    const result = await this.client
-      .scan({
+    const result = await this.client.send(
+      new ScanCommand({
         TableName: this.tableName,
         FilterExpression: '#type = :type',
         ExpressionAttributeNames: {
@@ -106,7 +112,7 @@ export class ConnectionStore {
           ':type': 'connection',
         },
       })
-      .promise();
+    );
 
     return result.Items?.map(format) ?? [];
   }
@@ -114,8 +120,8 @@ export class ConnectionStore {
   async create(input: CreateConnectionInput): Promise<Connection> {
     const id = uuidv4();
     const now = Date.now();
-    await this.client
-      .put({
+    await this.client.send(
+      new PutCommand({
         TableName: this.tableName,
         Item: {
           pk: `connection#${id}`,
@@ -128,7 +134,7 @@ export class ConnectionStore {
           createdAt: now,
         },
       })
-      .promise();
+    );
 
     return {
       type: 'connection',
@@ -143,8 +149,8 @@ export class ConnectionStore {
   }
 
   async update(id: string, input: UpdateConnectionInput): Promise<void> {
-    await this.client
-      .update({
+    await this.client.send(
+      new UpdateCommand({
         TableName: this.tableName,
         Key: { pk: `connection#${id}`, sk: `metadata#${id}` },
         ConditionExpression: '#id = :id',
@@ -158,14 +164,14 @@ export class ConnectionStore {
           ':schedule': input.schedule,
         },
       })
-      .promise();
+    );
   }
 
   async reserve(id: string): Promise<string | null> {
     const jobId = uuidv4();
     try {
-      await this.client
-        .update({
+      await this.client.send(
+        new UpdateCommand({
           TableName: this.tableName,
           Key: { pk: `connection#${id}`, sk: `metadata#${id}` },
           ConditionExpression:
@@ -178,12 +184,11 @@ export class ConnectionStore {
             ':currentJobId': jobId,
           },
         })
-        .promise();
+      );
     } catch (e) {
-      assertIsAWSError(e);
       // If we get a conditional check failure, that means either the item is
       // missing or it had a `currentJobId` value.
-      if (e.code === 'ConditionalCheckFailedException') {
+      if (e instanceof ConditionalCheckFailedException) {
         return null;
       } else {
         throw e;
@@ -194,8 +199,8 @@ export class ConnectionStore {
   }
 
   async finish(id: string): Promise<boolean> {
-    await this.client
-      .update({
+    await this.client.send(
+      new UpdateCommand({
         TableName: this.tableName,
         Key: { pk: `connection#${id}`, sk: `metadata#${id}` },
         ConditionExpression: 'attribute_exists(#currentJobId)',
@@ -208,14 +213,14 @@ export class ConnectionStore {
           ':lastRanAt': Date.now(),
         },
       })
-      .promise();
+    );
 
     return true;
   }
 
   async abort(id: string): Promise<boolean> {
-    await this.client
-      .update({
+    await this.client.send(
+      new UpdateCommand({
         TableName: this.tableName,
         Key: { pk: `connection#${id}`, sk: `metadata#${id}` },
         ConditionExpression: 'attribute_exists(#currentJobId)',
@@ -224,15 +229,15 @@ export class ConnectionStore {
           '#currentJobId': 'currentJobId',
         },
       })
-      .promise();
+    );
 
     return true;
   }
 
   async setExecutionArn(id: string, arn: string): Promise<void> {
     try {
-      await this.client
-        .update({
+      await this.client.send(
+        new UpdateCommand({
           TableName: this.tableName,
           Key: { pk: `connection#${id}`, sk: `metadata#${id}` },
           ConditionExpression: 'attribute_exists(pk)',
@@ -244,11 +249,10 @@ export class ConnectionStore {
             ':executionArn': arn,
           },
         })
-        .promise();
+      );
     } catch (e) {
-      assertIsAWSError(e);
       // If we get a conditional check failure, that means the item is missing
-      if (e.code === 'ConditionalCheckFailedException') {
+      if (e instanceof ConditionalCheckFailedException) {
         throw new Error(
           `Can't set execution ARN for missing connection with ID '${id}'`
         );
@@ -259,11 +263,11 @@ export class ConnectionStore {
   }
 
   async delete(id: string): Promise<void> {
-    await this.client
-      .delete({
+    await this.client.send(
+      new DeleteCommand({
         TableName: this.tableName,
         Key: { pk: `connection#${id}`, sk: `metadata#${id}` },
       })
-      .promise();
+    );
   }
 }

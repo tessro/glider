@@ -30,7 +30,10 @@
     "synth": "cdk synth"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.171.0",
     "@aws-sdk/client-s3": "3.171.0",
+    "@aws-sdk/client-sfn": "3.171.0",
+    "@aws-sdk/lib-dynamodb": "3.171.0",
     "cron-parser": "4.6.0",
     "pino": "8.6.0",
     "pino-lambda": "4.1.0",
@@ -44,7 +47,6 @@
     "@types/aws-lambda": "8.10.104",
     "@types/uuid": "8.3.4",
     "aws-cdk": "2.43.1",
-    "aws-sdk": "2.1222.0",
     "pino-pretty": "9.1.0"
   }
 }

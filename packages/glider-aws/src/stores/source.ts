@@ -1,4 +1,11 @@
-import type { DynamoDB } from 'aws-sdk';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  UpdateCommand,
+  DeleteCommand,
+  ScanCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 
@@ -32,7 +39,7 @@ interface Source {
 }
 
 interface Options {
-  client: DynamoDB.DocumentClient;
+  client: DynamoDBDocumentClient;
   tableName: string;
 }
 
@@ -51,7 +58,7 @@ function format(item: unknown): Source {
 }
 
 export class SourceStore {
-  private client: DynamoDB.DocumentClient;
+  private client: DynamoDBDocumentClient;
   private tableName: string;
 
   constructor(private options: Options) {
@@ -60,12 +67,12 @@ export class SourceStore {
   }
 
   async get(id: string): Promise<Source | null> {
-    const result = await this.client
-      .get({
+    const result = await this.client.send(
+      new GetCommand({
         TableName: this.tableName,
         Key: { pk: `source#${id}`, sk: `metadata#${id}` },
       })
-      .promise();
+    );
 
     if (!result.Item) {
       return null;
@@ -75,8 +82,8 @@ export class SourceStore {
   }
 
   async getAll(): Promise<Source[]> {
-    const result = await this.client
-      .scan({
+    const result = await this.client.send(
+      new ScanCommand({
         TableName: this.tableName,
         FilterExpression: '#type = :type',
         ExpressionAttributeNames: {
@@ -86,7 +93,7 @@ export class SourceStore {
           ':type': 'source',
         },
       })
-      .promise();
+    );
 
     return result.Items?.map(format) ?? [];
   }
@@ -94,8 +101,8 @@ export class SourceStore {
   async create(input: CreateSourceInput): Promise<Source> {
     const id = uuidv4();
     const now = Date.now();
-    await this.client
-      .put({
+    await this.client.send(
+      new PutCommand({
         TableName: this.tableName,
         Item: {
           pk: `source#${id}`,
@@ -108,7 +115,7 @@ export class SourceStore {
           createdAt: now,
         },
       })
-      .promise();
+    );
 
     return {
       type: 'source',
@@ -121,8 +128,8 @@ export class SourceStore {
   }
 
   async update(id: string, input: UpdateSourceInput): Promise<void> {
-    await this.client
-      .update({
+    await this.client.send(
+      new UpdateCommand({
         TableName: this.tableName,
         Key: { pk: `source#${id}`, sk: `metadata#${id}` },
         ConditionExpression: '#id = :id',
@@ -139,15 +146,15 @@ export class SourceStore {
           ':options': input.options,
         },
       })
-      .promise();
+    );
   }
 
   async delete(id: string): Promise<void> {
-    await this.client
-      .delete({
+    await this.client.send(
+      new DeleteCommand({
         TableName: this.tableName,
         Key: { pk: `source#${id}`, sk: `metadata#${id}` },
       })
-      .promise();
+    );
   }
 }
