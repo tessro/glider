@@ -23,6 +23,8 @@ interface JobOptions {
   logger?: Logger;
 }
 
+const MAX_ATTEMPTS = 3;
+
 function defaultTransform(raw: string): unknown[] {
   const data = JSON.parse(raw);
   if (Array.isArray(data)) {
@@ -139,6 +141,7 @@ export class Job {
     });
 
     let url = getSeed(stream, context);
+    let attempts = 0;
     while (url) {
       this.logger.info({ msg: `Fetching '${url}'`, url });
       const response = await got(url, { headers, throwHttpErrors: false });
@@ -160,8 +163,10 @@ export class Job {
         const nextUrl = stream.next(responseForSource, records, context);
         if (!nextUrl) break;
 
+        attempts = 0;
         url = nextUrl;
       } else {
+        attempts++;
         this.logger.warn({
           msg: `Received ${response.statusCode} while fetching '${url}'`,
           url,
@@ -169,6 +174,20 @@ export class Job {
           statusCode: response.statusCode,
           response: response.body,
         });
+        if (attempts > MAX_ATTEMPTS) {
+          this.logger.error({
+            msg: `Exceeded maximum attempts while fetching '${url}', aborting`,
+            url,
+            headers,
+            statusCode: response.statusCode,
+            response: response.body,
+            attempts,
+            maxAttempts: MAX_ATTEMPTS,
+          });
+          throw new Error(
+            `Exceeded maximum attempts while fetching '${url}', aborting`
+          );
+        }
       }
 
       // NOTE(ptr): We only sleep when we are going to fetch another page. This
