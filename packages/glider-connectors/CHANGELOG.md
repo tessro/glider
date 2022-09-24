@@ -1,5 +1,12 @@
 # @balsahq/glider-connectors
 
+## 0.4.1
+
+### Patch Changes
+
+- f43b809: Add Linear connector
+- c57f528: Add PagerDuty connector
+
 ## 0.4.0
 
 ### Patch Changes

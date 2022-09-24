@@ -1,5 +1,11 @@
 # @balsahq/glider
 
+## 0.4.1
+
+### Patch Changes
+
+- 6bf37c8: Connector `transform` methods are called in the context of the source object
+
 ## 0.4.0
 
 ### Patch Changes

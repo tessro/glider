@@ -1,5 +1,14 @@
 # @balsahq/glider-runner
 
+## 0.4.1
+
+### Patch Changes
+
+- 6bf37c8: Connector `transform` methods are called in the context of the source object
+- Updated dependencies [f43b809]
+- Updated dependencies [c57f528]
+  - @balsahq/glider-connectors@0.4.1
+
 ## 0.4.0
 
 ### Patch Changes
