@@ -123,9 +123,9 @@ async function main() {
       [args.source]: sourceProvider,
       [args.destination]: destinationProvider,
     },
-    source: new source(args.sourceOptions),
+    source: new source(args.sourceOptions ?? {}),
     sourceOptions: args.sourceOptions,
-    destination: new destination(args.destinationOptions),
+    destination: new destination(args.destinationOptions ?? {}),
     destinationOptions: args.destinationOptions,
   });
 
