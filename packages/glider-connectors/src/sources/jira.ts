@@ -93,7 +93,7 @@ export class JiraSource implements Source {
   }
 
   headers(context: Context) {
-    const token = context.credentials;
+    const { token } = context.credentials;
     return {
       Accept: 'application/json',
       Authorization: `Bearer ${token}`,
