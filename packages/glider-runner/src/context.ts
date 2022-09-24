@@ -11,6 +11,7 @@ import {
   FigmaSource,
   GitHubSource,
   JiraSource,
+  LinearSource,
 } from '@balsahq/glider-connectors';
 
 export class Registry<T> {
@@ -31,6 +32,7 @@ export function createSourceRegistry(): Registry<Constructor<Source>> {
   registry.register('figma', FigmaSource);
   registry.register('github', GitHubSource);
   registry.register('jira', JiraSource);
+  registry.register('linear', LinearSource);
 
   return registry;
 }
