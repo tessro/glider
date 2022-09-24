@@ -29,7 +29,7 @@ declare module '@balsahq/glider' {
     seed: string | ((context: C) => string);
     next?(response: Response, records: unknown[], context: C): string | null;
 
-    transform?(this: void, raw: unknown, context: C): unknown[];
+    transform?(raw: unknown, context: C): unknown[];
   }
 
   export interface Source {

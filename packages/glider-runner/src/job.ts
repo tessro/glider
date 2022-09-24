@@ -134,7 +134,7 @@ export class Job {
     callback: (records: unknown[]) => Promise<void>
   ): Promise<void> {
     const headers = await this.getHeaders();
-    const transform = stream.transform ?? defaultTransform;
+    const transform = stream.transform?.bind(stream) ?? defaultTransform;
 
     this.logger.info({
       msg: `Starting stream '${stream.name}'`,
