@@ -1,5 +1,12 @@
 # @balsahq/glider-aws
 
+## 0.4.2
+
+### Patch Changes
+
+- 7d63caf: Use caret dependencies everywhere
+- 7d63caf: Loosen AWS CDK dependency to include 2.39+
+
 ## 0.4.1
 
 ## 0.4.0
