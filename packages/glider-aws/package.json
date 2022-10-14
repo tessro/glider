@@ -30,18 +30,18 @@
     "synth": "cdk synth"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "3.171.0",
-    "@aws-sdk/client-s3": "3.171.0",
-    "@aws-sdk/client-sfn": "3.171.0",
-    "@aws-sdk/lib-dynamodb": "3.171.0",
-    "cron-parser": "4.6.0",
-    "pino": "8.6.0",
-    "pino-lambda": "4.1.0",
-    "uuid": "9.0.0",
-    "zod": "3.19.1"
+    "@aws-sdk/client-dynamodb": "^3.171.0",
+    "@aws-sdk/client-s3": "^3.171.0",
+    "@aws-sdk/client-sfn": "^3.171.0",
+    "@aws-sdk/lib-dynamodb": "^3.171.0",
+    "cron-parser": "^4.6.0",
+    "pino": "^8.6.0",
+    "pino-lambda": "^4.1.0",
+    "uuid": "^9.0.0",
+    "zod": "^3.19.1"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "2.43.1"
+    "aws-cdk-lib": "^2.39.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.104",
