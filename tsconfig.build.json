@@ -1,7 +1,7 @@
 {
   "files": [],
   "references": [
-    { "path": "packages/glider-aws" },
+    // `glider-aws` builds using `esbuild`, so it isn't included here
     { "path": "packages/glider-connectors" },
     { "path": "packages/glider-runner" }
   ]
