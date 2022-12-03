@@ -17,12 +17,18 @@
   "engines": {
     "node": ">= 14"
   },
-  "main": "dist/src/index.js",
+  "exports": {
+    "require": "dist/cjs/index.js",
+    "import": "dist/esm/index.js"
+  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "esbuild --platform=node --target=node16 --format=cjs --outdir=dist/cjs --sourcemap src/*.ts src/**/*.ts",
+    "build:esm": "esbuild --platform=node --target=node16 --format=esm --outdir=dist/esm --sourcemap src/*.ts src/**/*.ts",
+    "clean": "rm -rf dist",
     "deploy": "cdk deploy",
     "diff": "cdk diff",
     "remove": "cdk remove",
