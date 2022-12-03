@@ -1,5 +1,11 @@
 # @balsahq/glider-aws
 
+## 0.5.2
+
+### Patch Changes
+
+- b970126: Avoid using reserved `__dirname`
+
 ## 0.5.1
 
 ### Patch Changes

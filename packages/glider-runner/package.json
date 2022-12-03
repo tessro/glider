@@ -1,6 +1,6 @@
 {
   "name": "@balsahq/glider-runner",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "type": "module",
   "description": "Glider job runner",
   "author": "Balsa, Inc.",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.223.0",
-    "@balsahq/glider-connectors": "0.5.1",
+    "@balsahq/glider-connectors": "0.5.2",
     "got": "12.5.3",
     "mkdirp": "1.0.4",
     "mysql2": "2.3.3",
