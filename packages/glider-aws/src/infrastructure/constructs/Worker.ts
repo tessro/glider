@@ -18,7 +18,7 @@ import { Construct } from 'constructs';
 
 import { resolveScript } from '../utils.js';
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
+const dirname = fileURLToPath(new URL('.', import.meta.url));
 
 interface RunnerProps {
   readonly environment?: {
@@ -76,7 +76,7 @@ export class Worker extends Construct {
         format: nodejs.OutputFormat.ESM,
         mainFields: ['module', 'main'],
       },
-      entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
+      entry: resolveScript(pathJoin(dirname, '../../state-machine/index')),
       handler: 'beforeSync',
     });
 
@@ -87,7 +87,7 @@ export class Worker extends Construct {
         format: nodejs.OutputFormat.ESM,
         mainFields: ['module', 'main'],
       },
-      entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
+      entry: resolveScript(pathJoin(dirname, '../../state-machine/index')),
       handler: 'afterSync',
     });
 
@@ -98,7 +98,7 @@ export class Worker extends Construct {
         format: nodejs.OutputFormat.ESM,
         mainFields: ['module', 'main'],
       },
-      entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
+      entry: resolveScript(pathJoin(dirname, '../../state-machine/index')),
       handler: 'afterSleep',
     });
 
@@ -109,7 +109,7 @@ export class Worker extends Construct {
         format: nodejs.OutputFormat.ESM,
         mainFields: ['module', 'main'],
       },
-      entry: resolveScript(pathJoin(__dirname, '../../state-machine/index')),
+      entry: resolveScript(pathJoin(dirname, '../../state-machine/index')),
       handler: 'invokeSelf',
     });
 

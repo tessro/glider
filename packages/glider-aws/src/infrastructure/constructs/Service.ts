@@ -14,7 +14,7 @@ import { resolveScript } from '../utils.js';
 
 import { Worker, WorkerProps } from './Worker.js';
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
+const dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export interface ServiceProps {
   dynamoDb?: {
@@ -184,7 +184,7 @@ export class Service extends Construct {
         format: nodejs.OutputFormat.ESM,
         mainFields: ['module', 'main'],
       },
-      entry: resolveScript(pathJoin(__dirname, `../../controllers/${entry}`)),
+      entry: resolveScript(pathJoin(dirname, `../../controllers/${entry}`)),
       handler,
       environment,
     });
