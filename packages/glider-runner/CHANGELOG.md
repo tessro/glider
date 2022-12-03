@@ -1,5 +1,11 @@
 # @balsahq/glider-runner
 
+## 0.5.1
+
+### Patch Changes
+
+- @balsahq/glider-connectors@0.5.1
+
 ## 0.5.0
 
 ### Minor Changes

@@ -1,5 +1,14 @@
 # @balsahq/glider-aws
 
+## 0.5.1
+
+### Patch Changes
+
+- 4fac7a6: Fix importing CommonJS
+- 1162c9b: Fix path specifications in manifest
+- 049df58: Include missing sources
+- d18e21c: Include types
+
 ## 0.5.0
 
 ### Minor Changes
