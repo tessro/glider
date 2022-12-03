@@ -1,5 +1,11 @@
 # @balsahq/glider
 
+## 0.5.0
+
+### Minor Changes
+
+- 12ebe31: Drop support for Node 14/15
+
 ## 0.4.2
 
 ## 0.4.1

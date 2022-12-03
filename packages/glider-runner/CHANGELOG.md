@@ -1,5 +1,18 @@
 # @balsahq/glider-runner
 
+## 0.5.0
+
+### Minor Changes
+
+- 12ebe31: Drop support for Node 14/15
+
+### Patch Changes
+
+- d6255f2: Update dependencies
+- Updated dependencies [12ebe31]
+- Updated dependencies [d6255f2]
+  - @balsahq/glider-connectors@0.5.0
+
 ## 0.4.2
 
 ### Patch Changes

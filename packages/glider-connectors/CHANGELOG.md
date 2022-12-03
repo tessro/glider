@@ -1,5 +1,15 @@
 # @balsahq/glider-connectors
 
+## 0.5.0
+
+### Minor Changes
+
+- 12ebe31: Drop support for Node 14/15
+
+### Patch Changes
+
+- d6255f2: Update dependencies
+
 ## 0.4.2
 
 ## 0.4.1

@@ -1,5 +1,16 @@
 # @balsahq/glider-aws
 
+## 0.5.0
+
+### Minor Changes
+
+- 12ebe31: Drop support for Node 14/15
+
+### Patch Changes
+
+- d6255f2: Update dependencies
+- e6f7a16: Restore support for CommonJS
+
 ## 0.4.2
 
 ### Patch Changes
