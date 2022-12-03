@@ -29,8 +29,8 @@
   ],
   "scripts": {
     "build": "npm run build:cjs && npm run build:esm && npm run build:types",
-    "build:cjs": "esbuild --platform=node --target=node16 --format=cjs --outdir=dist/cjs --sourcemap src/*.ts src/**/*.ts && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
-    "build:esm": "esbuild --platform=node --target=node16 --format=esm --outdir=dist/esm --sourcemap src/*.ts src/**/*.ts",
+    "build:cjs": "esbuild --platform=node --target=node16 --format=cjs --outdir=dist/cjs --sourcemap `find src \\( -name '*.ts' \\)` && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
+    "build:esm": "esbuild --platform=node --target=node16 --format=esm --outdir=dist/esm --sourcemap `find src \\( -name '*.ts' \\)`",
     "build:types": "tsc --module node16 --emitDeclarationOnly --declaration --declarationDir dist/types src/*.ts src/**/*.ts",
     "clean": "rm -rf dist",
     "deploy": "cdk deploy",
