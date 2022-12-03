@@ -1,5 +1,11 @@
 # @balsahq/glider-aws
 
+## 0.5.3
+
+### Patch Changes
+
+- 922bab9: Shim `import.meta.url` in CJS
+
 ## 0.5.2
 
 ### Patch Changes
