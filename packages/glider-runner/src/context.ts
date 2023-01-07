@@ -10,6 +10,7 @@ import {
   StdoutDestination,
   FigmaSource,
   GitHubSource,
+  GoogleSource,
   JiraSource,
   LinearSource,
   PagerDutySource,
@@ -32,6 +33,7 @@ export function createSourceRegistry(): Registry<Constructor<Source>> {
 
   registry.register('figma', FigmaSource);
   registry.register('github', GitHubSource);
+  registry.register('google', GoogleSource);
   registry.register('jira', JiraSource);
   registry.register('linear', LinearSource);
   registry.register('pagerduty', PagerDutySource);
