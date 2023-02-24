@@ -22,12 +22,23 @@ declare module '@balsahq/glider' {
     parent?: P;
   }
 
+  export interface Request {
+    url: string;
+    method: 'GET' | 'POST';
+    headers?: Record<string, string>;
+    body?: string;
+  }
+
   export interface Stream<C = any> {
     name: string;
     parent?: Stream;
 
-    seed: string | ((context: C) => string);
-    next?(response: Response, records: unknown[], context: C): string | null;
+    seed: string | Request | ((context: C) => string | Request);
+    next?(
+      response: Response,
+      records: unknown[],
+      context: C
+    ): string | Request | null;
 
     transform?(raw: unknown, context: C): unknown[];
   }
@@ -35,8 +46,8 @@ declare module '@balsahq/glider' {
   export interface Source {
     name: string;
     headers?:
-      | Record<string, string>
-      | ((context: Context) => Record<string, string>);
+    | Record<string, string>
+    | ((context: Context) => Record<string, string>);
     requestSpacing?: number | ((response: Response) => number);
     streams: Stream[];
   }

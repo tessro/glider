@@ -2,6 +2,7 @@ import {
   Context as ConnectorContext,
   Destination,
   DestinationContext,
+  Request,
   Source,
   Stream,
   CredentialsProvider,
@@ -44,11 +45,19 @@ function getRequestSpacing(source: Source, response: Response): number {
   }
 }
 
-function getSeed(stream: Stream, context: unknown): string {
-  if (typeof stream.seed === 'function') {
-    return stream.seed(context);
+function toRequest(input: string | Request): Request {
+  if (typeof input === 'string') {
+    return { url: input, method: 'GET', body: undefined };
   } else {
-    return stream.seed;
+    return input;
+  }
+}
+
+function getSeed(stream: Stream, context: unknown): Request {
+  if (typeof stream.seed === 'function') {
+    return toRequest(stream.seed(context));
+  } else {
+    return toRequest(stream.seed);
   }
 }
 
@@ -140,14 +149,19 @@ export class Job {
       msg: `Starting stream '${stream.name}'`,
     });
 
-    let url = getSeed(stream, context);
+    let req = getSeed(stream, context);
     let attempts = 0;
-    while (url) {
-      this.logger.info({ msg: `Fetching '${url}'`, url });
-      const response = await got(url, { headers, throwHttpErrors: false });
+    while (req) {
+      this.logger.info({ msg: `Fetching '${req.url}'`, req });
+      const response = await got(req.url, {
+        method: req.method,
+        body: req.body,
+        headers: { ...headers, ...req.headers },
+        throwHttpErrors: false,
+      });
 
       const responseForSource = {
-        url,
+        url: req.url,
         body: response.body,
         headers: response.headers,
         statusCode: response.statusCode,
@@ -156,28 +170,28 @@ export class Job {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         const records = transform(response.body, context);
         await callback(records);
-        this.logger.info({ url, records: records.length });
+        this.logger.info({ req, records: records.length });
 
         if (!stream.next) break;
 
-        const nextUrl = stream.next(responseForSource, records, context);
-        if (!nextUrl) break;
+        const nextReq = stream.next(responseForSource, records, context);
+        if (!nextReq) break;
 
         attempts = 0;
-        url = nextUrl;
+        req = toRequest(nextReq);
       } else {
         attempts++;
         this.logger.warn({
-          msg: `Received ${response.statusCode} while fetching '${url}'`,
-          url,
+          msg: `Received ${response.statusCode} while fetching '${req.url}'`,
+          req,
           headers,
           statusCode: response.statusCode,
           response: response.body,
         });
         if (attempts > MAX_ATTEMPTS) {
           this.logger.error({
-            msg: `Exceeded maximum attempts while fetching '${url}', aborting`,
-            url,
+            msg: `Exceeded maximum attempts while fetching '${req.url}', aborting`,
+            req,
             headers,
             statusCode: response.statusCode,
             response: response.body,
@@ -185,7 +199,7 @@ export class Job {
             maxAttempts: MAX_ATTEMPTS,
           });
           throw new Error(
-            `Exceeded maximum attempts while fetching '${url}', aborting`
+            `Exceeded maximum attempts while fetching '${req.url}', aborting`
           );
         }
       }
