@@ -1,5 +1,11 @@
 # @balsahq/glider
 
+## 0.6.0
+
+### Patch Changes
+
+- 3917f0f: Add support for POST requests
+
 ## 0.5.3
 
 ## 0.5.2

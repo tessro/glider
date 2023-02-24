@@ -1,5 +1,15 @@
 # @balsahq/glider-connectors
 
+## 0.6.0
+
+### Minor Changes
+
+- 4c403ca: Add support for Google Calendar
+
+### Patch Changes
+
+- a7cd1ef: Add Notion connector
+
 ## 0.5.3
 
 ## 0.5.2

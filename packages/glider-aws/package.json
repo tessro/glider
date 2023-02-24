@@ -1,6 +1,6 @@
 {
   "name": "@balsahq/glider-aws",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "type": "module",
   "description": "Glider infrastructure for AWS",
   "author": "Balsa, Inc.",

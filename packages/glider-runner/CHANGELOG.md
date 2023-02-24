@@ -1,5 +1,19 @@
 # @balsahq/glider-runner
 
+## 0.6.0
+
+### Minor Changes
+
+- 4c403ca: Add support for Google Calendar
+
+### Patch Changes
+
+- a7cd1ef: Add Notion connector
+- 3917f0f: Add support for POST requests
+- Updated dependencies [a7cd1ef]
+- Updated dependencies [4c403ca]
+  - @balsahq/glider-connectors@0.6.0
+
 ## 0.5.3
 
 ### Patch Changes
