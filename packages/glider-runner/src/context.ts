@@ -13,6 +13,7 @@ import {
   GoogleSource,
   JiraSource,
   LinearSource,
+  NotionSource,
   PagerDutySource,
 } from '@balsahq/glider-connectors';
 
@@ -36,6 +37,7 @@ export function createSourceRegistry(): Registry<Constructor<Source>> {
   registry.register('google', GoogleSource);
   registry.register('jira', JiraSource);
   registry.register('linear', LinearSource);
+  registry.register('notion', NotionSource);
   registry.register('pagerduty', PagerDutySource);
 
   return registry;
