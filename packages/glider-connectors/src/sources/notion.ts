@@ -120,6 +120,60 @@ class PagesStream extends IncrementalNotionStream {
   }
 }
 
+interface PagesStreamContext {
+  id: string;
+}
+
+class BlocksStream extends NotionStream implements Stream<PagesStreamContext> {
+  private queue: string[] = [];
+
+  constructor(public readonly parent: PagesStream) {
+    super('blocks');
+  }
+
+  override seed(context: PagesStreamContext) {
+    return `https://api.notion.com/v1/blocks/${context.id}/children?page_size=${this.pageSize}`;
+  }
+
+  // In addition to paginating over blocks, we also perform a tree traversal,
+  // fetching all child blocks. This is done using breadth-first search
+  // strategy, which emits all blocks at one level of depth before emitting
+  // the next layer. As a result, blocks are emitted "out of order" from a
+  // human perspective. (They don't match the order they appear on a page.)
+  // Reconstructing the natural order is left to later transform stages. Doing
+  // it here would require a lot more flow control sources currently have.
+  override next(response: Response, records: any[]): string | Request | null {
+    for (const record of records) {
+      if (record.has_children) {
+        this.queue.push(record.id);
+      }
+    }
+
+    const data = JSON.parse(response.body);
+    if (data.has_more) {
+      const url = new URL(response.url);
+      url.searchParams.set('start_cursor', data.next_cursor);
+      return url.toString();
+    }
+
+    const next = this.queue.shift();
+    if (next) {
+      return `https://api.notion.com/v1/blocks/${next}/children?page_size=${this.pageSize}`;
+    } else {
+      return null;
+    }
+  }
+
+  override transform(raw: string): unknown[] {
+    const results = super.transform(raw);
+
+    // Filter out pages and databases, since we emit them elsewhere
+    return results.filter(
+      (r: any) => !['child_page', 'child_database'].includes(r.type)
+    );
+  }
+}
+
 export class NotionSource implements Source {
   readonly name = 'notion';
   readonly streams: Stream[];
@@ -143,9 +197,11 @@ export class NotionSource implements Source {
       });
     }
 
+    const pages = new PagesStream({ start });
     this.streams = [
+      pages,
       new DatabasesStream({ start }),
-      new PagesStream({ start }),
+      new BlocksStream(pages),
       new UsersStream(),
     ];
   }
@@ -171,7 +227,7 @@ export class NotionSource implements Source {
       }
     }
 
-    if (response.statusCode == 429) {
+    if (response.statusCode === 429) {
       const retryAfter = getNumericHeader('retry-after');
       this.logger.warn({
         msg: `Received 429, backing off`,
