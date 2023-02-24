@@ -51,12 +51,12 @@
     "zod": "^3.19.1"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.39.1"
+    "aws-cdk-lib": "^2.59.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.109",
-    "@types/uuid": "9.0.0",
-    "aws-cdk": "2.59.0",
-    "pino-pretty": "9.1.1"
+    "@types/aws-lambda": "8.10.111",
+    "@types/uuid": "9.0.1",
+    "aws-cdk": "2.66.1",
+    "pino-pretty": "9.4.0"
   }
 }
