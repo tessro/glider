@@ -20,8 +20,7 @@ abstract class JiraStream implements Stream {
 
   abstract seed(context: unknown): string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next(response: Response, records: unknown[]) {
+  next(response: Response, _records: unknown[]) {
     const data = JSON.parse(response.body);
     if (data.isLast) {
       return null;

@@ -23,7 +23,6 @@ abstract class LinearStream implements Stream {
 
   constructor(readonly name: string) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next(response: Response) {
     const { data } = JSON.parse(response.body);
     const { endCursor, hasNextPage } = data[this.name].pageInfo;

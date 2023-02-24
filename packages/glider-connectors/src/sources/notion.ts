@@ -20,7 +20,6 @@ abstract class NotionStream implements Stream {
 
   abstract seed(context: unknown): string | Request;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next(response: Response, _records: unknown[]): string | Request | null {
     const data = JSON.parse(response.body);
     if (!data.has_more) {

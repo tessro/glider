@@ -45,8 +45,7 @@ abstract class GitHubStream implements Stream {
 
   abstract seed(context: unknown): string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next(response: Response, records: Timestamped[]) {
+  next(response: Response, _records: Timestamped[]) {
     return getNextPageUrl(response.headers['link']);
   }
 }

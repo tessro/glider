@@ -20,7 +20,6 @@ abstract class GoogleStream implements Stream {
 
   abstract seed(context: unknown): string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next(response: Response, _records: unknown[]) {
     const data = JSON.parse(response.body);
     if (!data.nextPageToken) {
