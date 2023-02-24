@@ -21,7 +21,7 @@ abstract class LinearStream implements Stream {
   pageSize = 100;
   fields = ['id'];
 
-  constructor(readonly name: string) {}
+  constructor(readonly name: string) { }
 
   next(response: Response) {
     const { data } = JSON.parse(response.body);
