@@ -39,7 +39,7 @@ abstract class LinearStream implements Stream {
 
   transform(raw: string): unknown[] {
     const results = JSON.parse(raw);
-    return results.data[this.name].edges.map((e: any) => e.node);
+    return results.data[this.name].edges.map((e: { node: unknown }) => e.node);
   }
 
   protected formatUrl(cursor?: string): string {
