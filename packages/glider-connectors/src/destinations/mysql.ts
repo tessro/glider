@@ -21,7 +21,7 @@ export class MysqlDestination implements Destination {
 
   private connection!: Connection;
 
-  constructor(private readonly options: MysqlDestinationOptions) { }
+  constructor(private readonly options: MysqlDestinationOptions) {}
 
   async open(): Promise<void> {
     this.connection = await createMysqlConnection({

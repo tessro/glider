@@ -16,7 +16,7 @@ abstract class GoogleStream implements Stream {
   // default for most Jira endpoints is 50
   pageSize = 100;
 
-  constructor(readonly name: string) { }
+  constructor(readonly name: string) {}
 
   abstract seed(context: unknown): string;
 

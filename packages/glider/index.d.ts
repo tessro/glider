@@ -46,8 +46,8 @@ declare module '@balsahq/glider' {
   export interface Source {
     name: string;
     headers?:
-    | Record<string, string>
-    | ((context: Context) => Record<string, string>);
+      | Record<string, string>
+      | ((context: Context) => Record<string, string>);
     requestSpacing?: number | ((response: Response) => number);
     streams: Stream[];
   }

@@ -41,7 +41,7 @@ abstract class GitHubStream implements Stream {
   // GitHub's maximum allowed page size is 100 (default: 30)
   pageSize = 30;
 
-  constructor(readonly name: string) { }
+  constructor(readonly name: string) {}
 
   abstract seed(context: unknown): string;
 
