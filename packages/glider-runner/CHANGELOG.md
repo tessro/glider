@@ -1,5 +1,16 @@
 # @balsahq/glider-runner
 
+## 0.7.0
+
+### Minor Changes
+
+- 7186eba: Fix "retreived" typo (breaking schema change)
+
+### Patch Changes
+
+- Updated dependencies [7186eba]
+  - @balsahq/glider-connectors@0.7.0
+
 ## 0.6.0
 
 ### Minor Changes

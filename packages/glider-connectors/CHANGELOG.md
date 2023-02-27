@@ -1,5 +1,11 @@
 # @balsahq/glider-connectors
 
+## 0.7.0
+
+### Minor Changes
+
+- 7186eba: Fix "retreived" typo (breaking schema change)
+
 ## 0.6.0
 
 ### Minor Changes
