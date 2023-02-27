@@ -51,7 +51,7 @@ export class MysqlDestination implements Destination {
         `
         INSERT INTO ${this.connection.escapeId(
           tableName
-        )} (id, job_id, data, retreived_at)
+        )} (id, job_id, data, retrieved_at)
         VALUES (?, ?, ?, ?)
         `,
         [uuidv4(), jobId, JSON.stringify(record), new Date(retrievedAt)]
@@ -65,7 +65,7 @@ export class MysqlDestination implements Destination {
         id VARCHAR(36) PRIMARY KEY,
         job_id VARCHAR(36) NOT NULL,
         data JSON,
-        retreived_at DATETIME(3)
+        retrieved_at DATETIME(3)
       )
     `);
   }
