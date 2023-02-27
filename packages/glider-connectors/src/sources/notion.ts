@@ -129,6 +129,7 @@ interface PagesStreamContext {
 
 class BlocksStream extends NotionStream implements Stream<PagesStreamContext> {
   private queue: string[] = [];
+  private seqNo = 0;
 
   constructor(public readonly parent: PagesStream) {
     super('blocks');
@@ -159,6 +160,7 @@ class BlocksStream extends NotionStream implements Stream<PagesStreamContext> {
       return url.toString();
     }
 
+    this.seqNo = 0;
     const next = this.queue.shift();
     if (next) {
       return `https://api.notion.com/v1/blocks/${next}/children?page_size=${this.pageSize}`;
@@ -171,9 +173,9 @@ class BlocksStream extends NotionStream implements Stream<PagesStreamContext> {
     const results = super.transform(raw);
 
     // Filter out pages and databases, since we emit them elsewhere
-    return results.filter(
-      (r: any) => !['child_page', 'child_database'].includes(r.type)
-    );
+    return results
+      .filter((r: any) => !['child_page', 'child_database'].includes(r.type))
+      .map((r: any) => ({ ...r, _seq: this.seqNo++ }));
   }
 }
 
