@@ -170,7 +170,11 @@ export class Job {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         const records = transform(response.body, context);
         await callback(records);
-        this.logger.info({ req, records: records.length });
+        this.logger.info({
+          msg: `Successfully fetched ${req.url}`,
+          req,
+          records: records.length,
+        });
 
         if (!stream.next) break;
 
