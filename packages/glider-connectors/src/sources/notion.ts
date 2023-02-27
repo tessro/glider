@@ -92,6 +92,9 @@ class IncrementalNotionStream extends NotionStream {
     return {
       url: 'https://api.notion.com/v1/search',
       method: 'POST' as const,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         sort: {
           direction: 'ascending',
