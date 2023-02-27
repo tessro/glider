@@ -183,7 +183,7 @@ export class NotionSource implements Source {
   readonly name = 'notion';
   readonly streams: Stream[];
 
-  private readonly logger = pino({
+  protected readonly logger = pino({
     base: {
       source: this.name,
     },
