@@ -7,6 +7,7 @@ import {
 import {
   MysqlDestination,
   S3Destination,
+  SqliteDestination,
   StdoutDestination,
   FigmaSource,
   GitHubSource,
@@ -50,6 +51,7 @@ export function createDestinationRegistry(): Registry<
 
   registry.register('mysql', MysqlDestination);
   registry.register('s3', S3Destination);
+  registry.register('sqlite', SqliteDestination);
   registry.register('stdout', StdoutDestination);
 
   return registry;
