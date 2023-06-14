@@ -1,5 +1,15 @@
 # @balsahq/glider-runner
 
+## 0.7.1
+
+### Patch Changes
+
+- Add Slack source
+- 137c911: Add Sqlite destination
+- Updated dependencies
+- Updated dependencies [137c911]
+  - @balsahq/glider-connectors@0.7.1
+
 ## 0.7.0
 
 ### Minor Changes

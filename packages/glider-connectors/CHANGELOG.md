@@ -1,5 +1,12 @@
 # @balsahq/glider-connectors
 
+## 0.7.1
+
+### Patch Changes
+
+- Add Slack source
+- 137c911: Add Sqlite destination
+
 ## 0.7.0
 
 ### Minor Changes
