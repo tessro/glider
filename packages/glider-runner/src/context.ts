@@ -16,6 +16,7 @@ import {
   LinearSource,
   NotionSource,
   PagerDutySource,
+  SlackSource,
 } from '@balsahq/glider-connectors';
 
 export class Registry<T> {
@@ -40,6 +41,7 @@ export function createSourceRegistry(): Registry<Constructor<Source>> {
   registry.register('linear', LinearSource);
   registry.register('notion', NotionSource);
   registry.register('pagerduty', PagerDutySource);
+  registry.register('slack', SlackSource);
 
   return registry;
 }

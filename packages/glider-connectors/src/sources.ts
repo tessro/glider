@@ -5,3 +5,4 @@ export * from './sources/jira.js';
 export * from './sources/linear.js';
 export * from './sources/notion.js';
 export * from './sources/pagerduty.js';
+export * from './sources/slack.js';
