@@ -1,5 +1,11 @@
 # @balsahq/glider-connectors
 
+## 0.7.2
+
+### Patch Changes
+
+- 6b683c6: Add `_channel` property to Slack messages
+
 ## 0.7.1
 
 ### Patch Changes

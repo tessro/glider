@@ -1,5 +1,12 @@
 # @balsahq/glider-runner
 
+## 0.7.2
+
+### Patch Changes
+
+- Updated dependencies [6b683c6]
+  - @balsahq/glider-connectors@0.7.2
+
 ## 0.7.1
 
 ### Patch Changes
