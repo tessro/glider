@@ -12,7 +12,7 @@ interface Options {
   start?: string;
 }
 
-abstract class SlackStream implements Stream {
+abstract class SlackStream<C = unknown> implements Stream<C> {
   // Slack recommends 100-200; the limit is 1000
   pageSize = 200;
 
@@ -31,7 +31,7 @@ abstract class SlackStream implements Stream {
     return url.toString();
   }
 
-  transform(raw: string): unknown[] {
+  transform(raw: string, _context: C): unknown[] {
     const results = JSON.parse(raw);
     return results.values;
   }
@@ -86,7 +86,7 @@ interface MessagesStreamOptions {
   start?: Date;
 }
 
-class MessagesStream extends SlackStream {
+class MessagesStream extends SlackStream<ConversationRecord> {
   private readonly start?: Date;
 
   constructor(
@@ -111,7 +111,7 @@ class MessagesStream extends SlackStream {
     return url.toString();
   }
 
-  transform(raw: string) {
+  transform(raw: string, context: ConversationRecord) {
     const data = JSON.parse(raw);
 
     // Ideally we wouldn't make these calls in the first place,
@@ -120,7 +120,7 @@ class MessagesStream extends SlackStream {
       return [];
     }
 
-    return data.messages;
+    return data.messages.map((m: object) => ({ ...m, _channel: context.id }));
   }
 }
 
